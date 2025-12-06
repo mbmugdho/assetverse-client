@@ -18,7 +18,7 @@
 @layer utilities {
   /* Container */
   .container-x {
-    @apply w-full max-w-6xl mx-auto px-4;
+    @apply w-full max-w-7xl mx-auto px-4;
   }
 
   /* -------- Brand Colors (plain) -------- */
