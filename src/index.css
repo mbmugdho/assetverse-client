@@ -14,6 +14,93 @@
   }
 }
 
+/* DARK THEME OVERRIDES FOR CUSTOM CLASSES */
+@layer utilities {
+  /* Hero background in dark mode */
+  html[data-theme='dark'] .bg-hero-surface {
+    background: radial-gradient(
+        700px 400px at 0% 0%,
+        rgba(118, 185, 71, 0.22) 0%,
+        transparent 55%
+      ),
+      radial-gradient(
+        600px 350px at 100% 5%,
+        rgba(51, 123, 1, 0.3) 0%,
+        transparent 55%
+      ),
+      linear-gradient(135deg, #020617 0%, #0b1120 40%, #111827 100%);
+  }
+
+  /* Soft section backgrounds in dark mode */
+  html[data-theme='dark'] .bg-section-soft,
+  html[data-theme='dark'] .bg-section-soft2 {
+    background: radial-gradient(
+        500px 300px at 0% 0%,
+        rgba(118, 185, 71, 0.18) 0%,
+        transparent 55%
+      ),
+      linear-gradient(
+        135deg,
+        #020617 0%,
+        #020617 20%,
+        #0b1120 70%,
+        #111827 100%
+      );
+  }
+
+  /* Glass card style in dark mode */
+  html[data-theme='dark'] .card-glass-brand {
+    background-color: rgba(15, 23, 42, 0.95); /* slate-900 */
+    border-color: rgba(148, 163, 184, 0.35); /* slate-400 */
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+  }
+
+  /* Brand text colors in dark mode */
+  html[data-theme='dark'] .text-brand-deep {
+    color: #e5e7eb; /* gray-200 */
+  }
+
+  html[data-theme='dark'] .text-brand-main {
+    color: #beeac5; /* soft green for contrast */
+  }
+
+  html[data-theme='dark'] .text-brand-accent {
+    color: #76b947;
+  }
+
+  html[data-theme='dark'] .text-brand-soft {
+    color: #beeac5;
+  }
+
+  /* Brand backgrounds in dark mode (slightly tuned) */
+  html[data-theme='dark'] .bg-brand-deep {
+    background-color: #145032;
+  }
+
+  html[data-theme='dark'] .bg-brand-main {
+    background-color: #2f6c02;
+  }
+
+  html[data-theme='dark'] .bg-brand-accent {
+    background-color: #76b947;
+  }
+
+  html[data-theme='dark'] .bg-brand-soft {
+    background-color: #3b5f3e;
+  }
+
+  /* Badge + gradient helpers still readable on dark */
+  html[data-theme='dark'] .badge-brand {
+    @apply text-xs font-semibold;
+    background-image: linear-gradient(
+      90deg,
+      rgba(118, 185, 71, 0.5),
+      rgba(190, 234, 197, 0.6)
+    );
+    color: #0b1120;
+  }
+}
+
 /* ---------------- Utilities ---------------- */
 @layer utilities {
   /* Container */
@@ -36,6 +123,9 @@
 
   .bg-brand-soft {
     background-color: #beeac5;
+  }
+  .bg-brand-soft2 {
+    background-color: #d4f0d1;
   }
 
   .text-brand-deep {
@@ -74,6 +164,9 @@
   /* Section background, softer than hero */
   .bg-section-soft {
     background: linear-gradient(135deg, #beeac5 0%, #f4fff7 40%, #ffffff 100%);
+  }
+  .bg-section-soft2 {
+    background: linear-gradient(135deg, #ffffff 0%, #f4fff7 40%, #beeac5 100%);
   }
 
   /* -------- Gradient Text (for hero heading spans) -------- */

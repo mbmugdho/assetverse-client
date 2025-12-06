@@ -24,7 +24,7 @@ const benefits = [
 
 const AboutSection = () => {
   return (
-    <section className="bg-section-soft">
+    <section className="bg-section-soft2">
       <div className="container-x py-14 md:py-18 lg:py-20 grid grid-cols-1 md:grid-cols-[1.2fr,1fr] gap-10 items-center">
         <motion.div
           initial={{ opacity: 0, y: 18 }}
@@ -40,7 +40,7 @@ const AboutSection = () => {
             Designed for HR teams that never want to lose{' '}
             <span className="text-gradient-hero">another asset</span>.
           </h2>
-          <p className="text-base text-base-content/80 max-w-2xl">
+          <p className="text-base text-brand-main max-w-2xl">
             AssetVerse brings together HR, IT, and finance into a single,
             asset-aware workspace. From the first laptop request to the last day
             at work, every step is visible, traceable, and secure.
@@ -66,7 +66,7 @@ const AboutSection = () => {
                 <h3 className="text-sm font-semibold text-brand-deep">
                   {item.title}
                 </h3>
-                <p className="text-xs text-base-content/70 leading-relaxed">
+                <p className="text-xs text-brand-main leading-relaxed">
                   {item.description}
                 </p>
               </div>

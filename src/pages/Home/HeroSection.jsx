@@ -87,7 +87,7 @@ const HeroSection = () => {
           </h1>
 
           {/* Subtext */}
-          <p className="text-base md:text-lg text-base-content/80 max-w-xl">
+          <p className="text-brand-accent md:text-lg text-brand-accent max-w-xl">
             AssetVerse brings HR, employees, and company assets onto a single,
             intuitive platform. Track assignments, approvals, and returns in
             real time—across every team and location.
@@ -106,7 +106,7 @@ const HeroSection = () => {
           </div>
 
           {/* Supporting line */}
-          <div className="flex flex-wrap items-center gap-4 pt-3 text-sm text-base-content/70">
+          <div className="flex flex-wrap items-center gap-4 pt-3 text-sm text-brand-accent">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-brand-main" />
               <span>No credit card required</span>
