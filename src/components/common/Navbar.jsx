@@ -345,7 +345,7 @@ const Navbar = () => {
   const isDark = theme === DARK_THEME
 
   return (
-    <header className="sticky top-0 z-40 bg-base-100/95 backdrop-blur border-b border-base-200">
+    <header className="sticky top-0 z-40 bg-base-100/50 backdrop-blur border-b border-base-200 shadow-sm">
       <nav className="container-x flex items-center justify-between py-3">
         {/* Left: brand + mobile menu */}
         <div className="flex items-center gap-2">

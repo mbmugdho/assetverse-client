@@ -88,9 +88,7 @@ const HeroSection = () => {
 
           {/* Subtext */}
           <p className="text-brand-accent md:text-lg text-brand-accent max-w-xl">
-            AssetVerse brings HR, employees, and company assets onto a single,
-            intuitive platform. Track assignments, approvals, and returns in
-            real time—across every team and location.
+            AssetVerse is a comprehensive digital platform that helps companies efficiently manage their physical assets (laptops, keyboards, chairs, etc.) and track which employee has which equipment. It solves the common problem of companies losing track of valuable assets and streamlines the entire asset management process.
           </p>
 
           {/* CTAs */}

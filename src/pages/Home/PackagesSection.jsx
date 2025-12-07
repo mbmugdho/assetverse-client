@@ -36,8 +36,8 @@ const PackagesSection = () => {
     <section className="py-16 md:py-20 bg-section-soft">
       <div className="container-x">
         <div className="text-center max-w-2xl mx-auto mb-10 md:mb-12">
-          <p className="text-xs uppercase tracking-[0.18em] text-brand-main font-semibold">
-            Pricing &amp; Packages
+          <p className="text-s uppercase tracking-[0.18em] text-brand-main font-semibold">
+            Pricing & Packages
           </p>
           <h2 className="text-2xl md:text-3xl font-bold text-brand-deep mt-2">
             Scale from 5 to 20 employees without changing tools.
