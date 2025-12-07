@@ -7,6 +7,7 @@ import Login from '../pages/Auth/Login'
 import RegisterEmployee from '../pages/Auth/RegisterEmployee'
 import RegisterHR from '../pages/Auth/RegisterHR'
 import NotFound from '../pages/Error/NotFound'
+import LoadingSpinner from '../components/common/LoadingSpinner'
 
 // Employee dashboard pages
 import EmployeeMyAssets from '../pages/Dashboard/Employee/EmployeeMyAssets'
@@ -26,6 +27,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <MainLayout />,
+    hydrateFallbackElement: <LoadingSpinner />,
     children: [
       { index: true, element: <Home /> },
       { path: 'login', element: <Login /> },

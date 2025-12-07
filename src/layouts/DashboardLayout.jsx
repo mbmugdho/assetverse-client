@@ -32,7 +32,7 @@ const DashboardLayout = () => {
   const title = resolveTitleFromPath(location.pathname)
 
   return (
-    <div className="min-h-screen bg-base-100">
+    <div className="min-h-screen bg-section-soft">
       <div className="drawer lg:drawer-open">
         <input
           id="dashboard-drawer"
