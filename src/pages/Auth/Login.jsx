@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Mail, Lock, LogIn } from 'lucide-react'
-import loginIllustration from '../../assets/illustrations/login.png' // adjust path/name
+import loginIllustration from '../../assets/illustrations/login.png'
 
 const Login = () => {
   const handleSubmit = e => {

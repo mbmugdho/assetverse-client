@@ -113,7 +113,7 @@ const RegisterEmployee = () => {
                     name="password"
                     required
                     minLength={6}
-                    placeholder="••••••••"
+                    placeholder="******"
                     className="input input-bordered w-full pl-10"
                   />
                 </div>
