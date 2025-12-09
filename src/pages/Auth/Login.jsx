@@ -1,19 +1,65 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Mail, Lock, LogIn } from 'lucide-react'
 import loginIllustration from '../../assets/illustrations/login.png'
+import { useAuth } from '../../context/AuthContext'
 
 const Login = () => {
-  const handleSubmit = e => {
+  const { login, googleLogin, isLoading } = useAuth()
+  const [formLoading, setFormLoading] = useState(false)
+  const [error, setError] = useState('')
+  const navigate = useNavigate()
+  const location = useLocation()
+  const from = location.state?.from || '/dashboard/employee/my-assets'
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // TODO: implement real login (Firebase + backend JWT)
-    console.log('login submit')
+    setError('')
+    const form = e.target
+    const email = form.email.value
+    const password = form.password.value
+
+    try {
+      setFormLoading(true)
+      await login({ email, password })
+      navigate(from, { replace: true })
+    } catch (err) {
+      console.error(err)
+      setError(err.message || 'Failed to login')
+    } finally {
+      setFormLoading(false)
+    }
   }
 
-  const handleGoogleLogin = () => {
-    // TODO: implement Google login
-    console.log('google login')
+  const handleGoogleLogin = async () => {
+    setError('')
+    try {
+      setFormLoading(true)
+      const result = await googleLogin()
+
+      if (result.status === 'existing') {
+        // User already in DB, JWT issued; go back to previous or default route
+        navigate(from, { replace: true })
+      } else if (result.status === 'needsOnboarding') {
+        // New Google user: choose role & complete profile
+        navigate('/auth/google-onboard', {
+          state: {
+            email: result.email,
+            name: result.name,
+          },
+          replace: true,
+        })
+      }
+    } catch (err) {
+      console.error(err)
+      setError(err.message || 'Google login failed')
+    } finally {
+      setFormLoading(false)
+    }
   }
+
+  const disabled = isLoading || formLoading
 
   return (
     <section className="bg-base-100">
@@ -60,6 +106,7 @@ const Login = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Email */}
               <div className="form-control">
                 <label className="label">
                   <span className="label-text text-sm font-medium text-brand-deep">
@@ -80,6 +127,7 @@ const Login = () => {
                 </div>
               </div>
 
+              {/* Password */}
               <div className="form-control">
                 <label className="label">
                   <span className="label-text text-sm font-medium text-brand-deep">
@@ -106,12 +154,15 @@ const Login = () => {
                 </label>
               </div>
 
+              {error && <p className="text-xs text-error mt-1">{error}</p>}
+
               <button
                 type="submit"
-                className="btn-gradient-primary w-full flex items-center justify-center gap-2 mt-2"
+                disabled={disabled}
+                className="btn-gradient-primary w-full flex items-center justify-center gap-2 mt-2 disabled:opacity-60"
               >
                 <LogIn className="w-4 h-4" />
-                <span>Login</span>
+                <span>{disabled ? 'Logging in...' : 'Login'}</span>
               </button>
 
               <div className="divider text-xs text-base-content/60">
@@ -121,7 +172,8 @@ const Login = () => {
               <button
                 type="button"
                 onClick={handleGoogleLogin}
-                className="btn-gradient-outline w-full text-sm"
+                disabled={disabled}
+                className="btn-gradient-outline w-full text-sm disabled:opacity-60"
               >
                 Continue with Google
               </button>

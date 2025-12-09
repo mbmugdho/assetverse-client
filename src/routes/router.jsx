@@ -8,6 +8,7 @@ import RegisterEmployee from '../pages/Auth/RegisterEmployee'
 import RegisterHR from '../pages/Auth/RegisterHR'
 import NotFound from '../pages/Error/NotFound'
 import LoadingSpinner from '../components/common/LoadingSpinner'
+import ChooseRoleAfterGoogle from '../pages/Auth/ChooseRoleAfterGoogle'
 
 // Employee dashboard pages
 import EmployeeMyAssets from '../pages/Dashboard/Employee/EmployeeMyAssets'
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
       { path: 'login', element: <Login /> },
       { path: 'register/employee', element: <RegisterEmployee /> },
       { path: 'register/hr', element: <RegisterHR /> },
+      { path: 'auth/choose-role', element: <ChooseRoleAfterGoogle /> },
       { path: '*', element: <NotFound /> },
     ],
   },
