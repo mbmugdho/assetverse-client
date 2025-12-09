@@ -20,7 +20,9 @@ const DashboardTopbar = ({
 }) => {
   const [theme, setTheme] = useState(getInitialTheme)
   const navigate = useNavigate()
-  const { backendUser, role: ctxRole, logout } = useAuth()
+
+  // Pull both backendUser (DB) and firebaseUser (Firebase/Google) from context
+  const { backendUser, firebaseUser, role: ctxRole, logout } = useAuth()
 
   useEffect(() => {
     const root = document.documentElement
@@ -42,12 +44,23 @@ const DashboardTopbar = ({
     (effectiveRole === 'hr' ? 'HR Manager' : 'Employee User')
   const userEmail = backendUser?.email || 'user@example.com'
 
+  // Avatar source: DB profileImage > Google photoURL > null
+  const avatarUrl = backendUser?.profileImage || firebaseUser?.photoURL || null
+
   const handleLogout = async () => {
     try {
       await logout()
       navigate('/login', { replace: true })
     } catch (err) {
       console.error('Logout failed', err)
+    }
+  }
+
+  const handleViewProfile = () => {
+    if (effectiveRole === 'hr') {
+      navigate('/dashboard/hr/profile')
+    } else {
+      navigate('/dashboard/employee/profile')
     }
   }
 
@@ -93,10 +106,18 @@ const DashboardTopbar = ({
           {/* User info */}
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-              <div className="w-9 rounded-full ring ring-brand-accent ring-offset-base-100 ring-offset-2">
-                <span className="flex items-center justify-center h-full text-xs font-semibold text-brand-deep">
-                  {userName[0]}
-                </span>
+              <div className="w-9 h-9 rounded-full ring ring-brand-accent ring-offset-base-100 ring-offset-2 overflow-hidden flex items-center justify-center bg-base-200">
+                {avatarUrl ? (
+                  <img
+                    src={avatarUrl}
+                    alt="User avatar"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-xs font-semibold text-brand-deep">
+                    {userName?.[0] || 'U'}
+                  </span>
+                )}
               </div>
             </label>
             <ul
@@ -117,8 +138,11 @@ const DashboardTopbar = ({
                 <hr className="my-1 border-base-200" />
               </li>
               <li>
-                {/* Later: navigate to profile route based on role */}
-                <button className="text-xs text-base-content/80">
+                <button
+                  type="button"
+                  className="text-xs text-base-content/80"
+                  onClick={handleViewProfile}
+                >
                   View profile
                 </button>
               </li>
