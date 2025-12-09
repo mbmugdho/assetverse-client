@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Mail, Lock, LogIn } from 'lucide-react'
 import loginIllustration from '../../assets/illustrations/login.png'
 import { useAuth } from '../../context/AuthContext'
@@ -10,10 +10,8 @@ const Login = () => {
   const [formLoading, setFormLoading] = useState(false)
   const [error, setError] = useState('')
   const navigate = useNavigate()
-  const location = useLocation()
-  const from = location.state?.from || '/dashboard/employee/my-assets'
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault()
     setError('')
     const form = e.target
@@ -22,8 +20,13 @@ const Login = () => {
 
     try {
       setFormLoading(true)
-      await login({ email, password })
-      navigate(from, { replace: true })
+      const user = await login({ email, password })
+
+      if (user.role === 'hr') {
+        navigate('/dashboard/hr/assets', { replace: true })
+      } else {
+        navigate('/dashboard/employee/my-assets', { replace: true })
+      }
     } catch (err) {
       console.error(err)
       setError(err.message || 'Failed to login')
@@ -39,10 +42,12 @@ const Login = () => {
       const result = await googleLogin()
 
       if (result.status === 'existing') {
-        // User already in DB, JWT issued; go back to previous or default route
-        navigate(from, { replace: true })
+        if (result.role === 'hr') {
+          navigate('/dashboard/hr/assets', { replace: true })
+        } else {
+          navigate('/dashboard/employee/my-assets', { replace: true })
+        }
       } else if (result.status === 'needsOnboarding') {
-        // New Google user: choose role & complete profile
         navigate('/auth/google-onboard', {
           state: {
             email: result.email,
@@ -143,7 +148,7 @@ const Login = () => {
                     name="password"
                     required
                     minLength={6}
-                    placeholder="••••••••"
+                    placeholder="******"
                     className="input input-bordered w-full pl-10"
                   />
                 </div>
@@ -154,7 +159,9 @@ const Login = () => {
                 </label>
               </div>
 
-              {error && <p className="text-xs text-error mt-1">{error}</p>}
+              {error && (
+                <p className="text-xs text-error mt-1">{error}</p>
+              )}
 
               <button
                 type="submit"
