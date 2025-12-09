@@ -1,14 +1,47 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Mail, Lock, User, Building2, Image as ImageIcon, Calendar } from 'lucide-react'
 import loginIllustration from '../../assets/illustrations/login.png'
+import { useAuth } from '../../context/AuthContext'
 
 const RegisterHR = () => {
-  const handleSubmit = e => {
+  const { registerHR, isLoading } = useAuth()
+  const [formLoading, setFormLoading] = useState(false)
+  const [error, setError] = useState('')
+  const navigate = useNavigate()
+
+  const handleSubmit = async e => {
     e.preventDefault()
-    // TODO: implement real HR registration
-    console.log('register HR submit')
+    setError('')
+    const form = e.target
+    const name = form.name.value
+    const email = form.email.value
+    const password = form.password.value
+    const dateOfBirth = form.dateOfBirth.value
+    const companyName = form.companyName.value
+    const companyLogo = form.companyLogo.value
+
+    try {
+      setFormLoading(true)
+      await registerHR({
+        name,
+        email,
+        password,
+        dateOfBirth,
+        companyName,
+        companyLogo,
+      })
+      navigate('/login', { replace: true })
+    } catch (err) {
+      console.error(err)
+      setError(err.message || 'Failed to create HR account')
+    } finally {
+      setFormLoading(false)
+    }
   }
+
+  const disabled = isLoading || formLoading
 
   return (
     <section className="bg-base-100">
@@ -29,7 +62,7 @@ const RegisterHR = () => {
             <div className="w-full max-w-md">
               <img
                 src={loginIllustration}
-                alt="HR manager registration illustration"
+                alt="HR registration illustration"
                 className="w-full h-auto object-contain"
               />
             </div>
@@ -51,7 +84,7 @@ const RegisterHR = () => {
                 <span className="text-gradient-hero">company workspace</span>.
               </h1>
               <p className="text-sm text-base-content/70 mt-2">
-                Create your AssetVerse company account. You'll start with a
+                Create your AssetVerse company account. You&apos;ll start with a
                 free Basic package (5 employees).
               </p>
             </div>
@@ -106,7 +139,7 @@ const RegisterHR = () => {
                     Company logo URL
                   </span>
                 </label>
-                <div className="relative">
+                <div className="relative mb-1">
                   <span className="absolute inset-y-0 left-3 flex items-center text-base-content/50">
                     <ImageIcon className="w-4 h-4" />
                   </span>
@@ -125,7 +158,7 @@ const RegisterHR = () => {
                 </label>
               </div>
 
-              {/* Email */}
+              {/* Work email */}
               <div className="form-control">
                 <label className="label">
                   <span className="label-text text-sm font-medium text-brand-deep">
@@ -162,7 +195,7 @@ const RegisterHR = () => {
                     name="password"
                     required
                     minLength={6}
-                    placeholder="******"
+                    placeholder="••••••••"
                     className="input input-bordered w-full pl-10"
                   />
                 </div>
@@ -173,7 +206,7 @@ const RegisterHR = () => {
                 </label>
               </div>
 
-              {/* Date of birth */}
+              {/* DOB */}
               <div className="form-control">
                 <label className="label">
                   <span className="label-text text-sm font-medium text-brand-deep">
@@ -193,11 +226,16 @@ const RegisterHR = () => {
                 </div>
               </div>
 
+              {error && (
+                <p className="text-xs text-error mt-1">{error}</p>
+              )}
+
               <button
                 type="submit"
-                className="btn-gradient-primary w-full flex items-center justify-center gap-2 mt-2"
+                disabled={disabled}
+                className="btn-gradient-primary w-full text-sm mt-2 disabled:opacity-60"
               >
-                <span>Create HR Workspace</span>
+                {disabled ? 'Creating workspace...' : 'Create HR Workspace'}
               </button>
             </form>
 

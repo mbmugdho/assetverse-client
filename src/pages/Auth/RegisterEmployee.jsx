@@ -1,14 +1,39 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Mail, Lock, User, Calendar } from 'lucide-react'
-import loginIllustration from '../../assets/illustrations/login.png' 
+import loginIllustration from '../../assets/illustrations/login.png'
+import { useAuth } from '../../context/AuthContext'
 
 const RegisterEmployee = () => {
-  const handleSubmit = e => {
+  const { registerEmployee, isLoading } = useAuth()
+  const [formLoading, setFormLoading] = useState(false)
+  const [error, setError] = useState('')
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // TODO: implement real employee registration
-    console.log('register employee submit')
+    setError('')
+    const form = e.target
+    const name = form.name.value
+    const email = form.email.value
+    const password = form.password.value
+    const dateOfBirth = form.dateOfBirth.value
+
+    try {
+      setFormLoading(true)
+      await registerEmployee({ name, email, password, dateOfBirth })
+      // After successful registration, go to login
+      navigate('/login', { replace: true })
+    } catch (err) {
+      console.error(err)
+      setError(err.message || 'Failed to create employee account')
+    } finally {
+      setFormLoading(false)
+    }
   }
+
+  const disabled = isLoading || formLoading
 
   return (
     <section className="bg-base-100">
@@ -47,10 +72,12 @@ const RegisterEmployee = () => {
                 Join as Employee
               </p>
               <h1 className="text-xl md:text-2xl font-bold text-brand-deep mt-2">
-                Create your <span className="text-gradient-hero">AssetVerse</span> account.
+                Create your{' '}
+                <span className="text-gradient-hero">AssetVerse</span> account.
               </h1>
               <p className="text-sm text-base-content/70 mt-2">
-                Track every asset you receive across multiple companies, with one login.
+                Track every asset you receive across multiple companies, with
+                one login.
               </p>
             </div>
 
@@ -113,7 +140,7 @@ const RegisterEmployee = () => {
                     name="password"
                     required
                     minLength={6}
-                    placeholder="******"
+                    placeholder="••••••••"
                     className="input input-bordered w-full pl-10"
                   />
                 </div>
@@ -144,17 +171,20 @@ const RegisterEmployee = () => {
                 </div>
               </div>
 
+              {error && <p className="text-xs text-error mt-1">{error}</p>}
+
               <button
                 type="submit"
-                className="btn-gradient-primary w-full flex items-center justify-center gap-2 mt-2"
+                disabled={disabled}
+                className="btn-gradient-primary w-full text-sm mt-2 disabled:opacity-60"
               >
-                <span>Create Employee Account</span>
+                {disabled ? 'Creating account...' : 'Create Employee Account'}
               </button>
             </form>
 
             <div className="mt-5 text-xs md:text-sm text-base-content/70 space-y-1.5">
               <p>
-                Need to manage a company instead?{' '}
+                Want to manage a company instead?{' '}
                 <Link
                   to="/register/hr"
                   className="text-brand-main font-semibold hover:underline"
