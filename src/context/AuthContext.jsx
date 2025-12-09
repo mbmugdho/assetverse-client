@@ -1,4 +1,3 @@
-// src/context/AuthContext.jsx
 import { createContext, useContext, useEffect, useState } from 'react'
 import {
   createUserWithEmailAndPassword,
@@ -13,26 +12,22 @@ import apiClient from '../services/apiClient'
 import { useQuery } from '@tanstack/react-query'
 
 const AuthContext = createContext(null)
-
 export const useAuth = () => useContext(AuthContext)
 
-// Google provider instance
 const googleProvider = new GoogleAuthProvider()
 
 export const AuthProvider = ({ children }) => {
   const [firebaseUser, setFirebaseUser] = useState(null)
   const [authLoading, setAuthLoading] = useState(true)
 
-  // Track Firebase auth state
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, user => {
       setFirebaseUser(user || null)
       setAuthLoading(false)
     })
     return () => unsubscribe()
   }, [])
 
-  // Fetch current backend user (/me) when we have a Firebase user
   const {
     data: backendUser,
     isLoading: backendLoading,
@@ -43,14 +38,13 @@ export const AuthProvider = ({ children }) => {
       const res = await apiClient.get('/users/me')
       return res.data
     },
-    enabled: !!firebaseUser, // only fetch if logged into Firebase
+    enabled: !!firebaseUser,
   })
 
   const isLoading = authLoading || (firebaseUser && backendLoading)
 
-  // ========== Email/Password flows ==========
+  // ========== Email/Password registration ==========
 
-  // Register Employee with email/password
   const registerEmployee = async ({ name, email, password, dateOfBirth }) => {
     // 1) Firebase signup
     const cred = await createUserWithEmailAndPassword(auth, email, password)
@@ -63,16 +57,12 @@ export const AuthProvider = ({ children }) => {
       role: 'employee',
     })
 
-    // 3) Issue JWT
-    await apiClient.post('/auth/jwt', { email })
-
-    // 4) Refresh /me
-    await refetchMe()
+    // 3) Sign out so they go through normal login flow
+    await signOut(auth)
 
     return cred
   }
 
-  // Register HR with email/password
   const registerHR = async ({
     name,
     email,
@@ -81,10 +71,8 @@ export const AuthProvider = ({ children }) => {
     companyName,
     companyLogo,
   }) => {
-    // 1) Firebase signup
     const cred = await createUserWithEmailAndPassword(auth, email, password)
 
-    // 2) Backend user creation
     await apiClient.post('/users', {
       name,
       email,
@@ -94,36 +82,24 @@ export const AuthProvider = ({ children }) => {
       companyLogo,
     })
 
-    // 3) Issue JWT
-    await apiClient.post('/auth/jwt', { email })
-
-    // 4) Refresh /me
-    await refetchMe()
+    await signOut(auth)
 
     return cred
   }
 
-  // Login with email/password
+  // ========== Email/Password login ==========
+
+  // Returns backend user (with role) so UI can redirect properly
   const login = async ({ email, password }) => {
-    // 1) Firebase login
     await signInWithEmailAndPassword(auth, email, password)
-
-    // 2) Issue JWT with backend
     await apiClient.post('/auth/jwt', { email })
-
-    // 3) Refresh /me
+    const res = await apiClient.get('/users/me')
     await refetchMe()
+    return res.data
   }
 
-  // ========== Google Login flow ==========
+  // ========== Google login / onboarding ==========
 
-  /**
-   * 1) User clicks "Continue with Google" on Login page.
-   * 2) We sign in with Google in Firebase.
-   * 3) We try to issue JWT via backend.
-   *    - If 200 → user exists in DB → return { status: 'existing', email }
-   *    - If 404 → user not in DB → return { status: 'needsOnboarding', email, name }
-   */
   const googleLogin = async () => {
     const result = await signInWithPopup(auth, googleProvider)
     const user = result.user
@@ -135,30 +111,27 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      // Try to issue JWT; if user exists in DB, this will succeed
       await apiClient.post('/auth/jwt', { email })
+      const res = await apiClient.get('/users/me')
       await refetchMe()
-      return { status: 'existing', email }
+      return {
+        status: 'existing',
+        email,
+        role: res.data.role,
+      }
     } catch (err) {
-      // If backend says "User not found in database"
       if (err.response && err.response.status === 404) {
-        // User is logged into Firebase via Google, but not in our DB.
-        // We'll send them to onboarding to choose role & fill extra info.
+        // Not in DB yet
         return {
           status: 'needsOnboarding',
           email,
           name: displayName,
         }
       }
-      // Other error -> rethrow
       throw err
     }
   }
 
-  /**
-   * Google onboarding: complete Employee profile.
-   * User is already Google-authenticated; we just create DB user + JWT.
-   */
   const completeGoogleSignupEmployee = async ({ name, email, dateOfBirth }) => {
     await apiClient.post('/users', {
       name,
@@ -170,9 +143,6 @@ export const AuthProvider = ({ children }) => {
     await refetchMe()
   }
 
-  /**
-   * Google onboarding: complete HR profile.
-   */
   const completeGoogleSignupHR = async ({
     name,
     email,
@@ -217,5 +187,5 @@ export const AuthProvider = ({ children }) => {
     logout,
   }
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider> 
 }
