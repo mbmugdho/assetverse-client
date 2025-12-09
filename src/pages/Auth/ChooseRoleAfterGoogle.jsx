@@ -115,11 +115,11 @@ const ChooseRoleAfterGoogle = () => {
 
             {/* Role selector */}
             <div className="mb-4">
-              <div className="tabs tabs-boxed bg-base-200/60">
+              <div>
                 <button
                   type="button"
                   onClick={() => setRole('employee')}
-                  className={`tab text-xs md:text-sm ${
+                  className={`btn btn-gradient-outline text-xs md:text-sm ${
                     role === 'employee'
                       ? 'tab-active text-brand-deep'
                       : 'text-base-content/70'
@@ -130,10 +130,10 @@ const ChooseRoleAfterGoogle = () => {
                 <button
                   type="button"
                   onClick={() => setRole('hr')}
-                  className={`tab text-xs md:text-sm ${
+                  className={`btn btn-gradient-outline  text-xs md:text-sm ${
                     role === 'hr'
                       ? 'tab-active text-brand-deep'
-                      : 'text-base-content/70'
+                      : 'text-base-content'
                   }`}
                 >
                   Join as HR Manager
