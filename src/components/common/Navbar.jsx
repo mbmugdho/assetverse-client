@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { Menu, SunMedium, MoonStar } from 'lucide-react'
+import logo from '../../assets/logos/logo.png'
 
 // DaisyUI built-in themes
 const LIGHT_THEME = 'light'
@@ -362,7 +363,8 @@ const Navbar = () => {
             to="/"
             className="flex items-center gap-1.5 hover:opacity-90 transition-opacity"
           >
-            <span className="text-lg md:text-xl font-semibold tracking-tight text-brand-deep">
+            <img src={logo} alt="AssetVerse Logo" className="w-8 h-6" />
+            <span className="text-lg md:text-xl font-bold tracking-tight text-brand-deep">
               Asset
             </span>
             <span className="text-lg md:text-xl font-extrabold tracking-tight text-gradient-hero">

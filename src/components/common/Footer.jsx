@@ -1,6 +1,9 @@
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { Mail, Phone } from 'lucide-react'
 import { FaFacebook, FaInstagram } from "react-icons/fa";
+import logo from '../../assets/logos/logo.png'
+
 
 const Footer = () => {
   const year = new Date().getFullYear()
@@ -15,6 +18,7 @@ const Footer = () => {
             to="/"
             className="inline-flex items-baseline gap-1.5 hover:opacity-90 transition-opacity"
           >
+            <img src={logo} alt="AssetVerse Logo" className="w-8 h-6" />
             <span className="text-lg font-semibold tracking-tight text-brand-deep">
               Asset
             </span>
