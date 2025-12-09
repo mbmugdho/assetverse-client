@@ -48,7 +48,7 @@ const Login = () => {
           navigate('/dashboard/employee/my-assets', { replace: true })
         }
       } else if (result.status === 'needsOnboarding') {
-        navigate('/auth/google-onboard', {
+        navigate('/auth/choose-role', {
           state: {
             email: result.email,
             name: result.name,

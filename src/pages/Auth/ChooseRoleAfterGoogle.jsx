@@ -14,7 +14,6 @@ const ChooseRoleAfterGoogle = () => {
     isLoading: authLoading,
   } = useAuth()
 
-  // Data passed from Login's googleLogin
   const { email, name } = location.state || {}
 
   const [role, setRole] = useState('employee')
@@ -23,12 +22,11 @@ const ChooseRoleAfterGoogle = () => {
 
   useEffect(() => {
     if (!email) {
-      // User came here directly → send them back to login
       navigate('/login', { replace: true })
     }
   }, [email, navigate])
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault()
     if (!email) return
 
@@ -246,7 +244,9 @@ const ChooseRoleAfterGoogle = () => {
                 </>
               )}
 
-              {error && <p className="text-xs text-error mt-1">{error}</p>}
+              {error && (
+                <p className="text-xs text-error mt-1">{error}</p>
+              )}
 
               <button
                 type="submit"

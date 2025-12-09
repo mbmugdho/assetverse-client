@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Menu, SunMedium, MoonStar } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
 
-// Same theme logic as Navbar
 const LIGHT_THEME = 'light'
 const DARK_THEME = 'dark'
 
@@ -13,8 +14,13 @@ const getInitialTheme = () => {
   return prefersDark ? DARK_THEME : LIGHT_THEME
 }
 
-const DashboardTopbar = ({ title = 'Dashboard', role = 'employee' }) => {
+const DashboardTopbar = ({
+  title = 'Dashboard',
+  role: roleProp = 'employee',
+}) => {
   const [theme, setTheme] = useState(getInitialTheme)
+  const navigate = useNavigate()
+  const { backendUser, role: ctxRole, logout } = useAuth()
 
   useEffect(() => {
     const root = document.documentElement
@@ -28,15 +34,21 @@ const DashboardTopbar = ({ title = 'Dashboard', role = 'employee' }) => {
 
   const isDark = theme === DARK_THEME
 
-  // TODO: replace with real user data
-  const user = {
-    name: role === 'hr' ? 'HR Manager' : 'Employee User',
-    email: 'user@example.com',
-  }
+  // Prefer role from context, fallback to prop
+  const effectiveRole = ctxRole || roleProp || 'employee'
 
-  const handleLogout = () => {
-    // TODO: implement real logout
-    console.log('dashboard logout')
+  const userName =
+    backendUser?.name ||
+    (effectiveRole === 'hr' ? 'HR Manager' : 'Employee User')
+  const userEmail = backendUser?.email || 'user@example.com'
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+      navigate('/login', { replace: true })
+    } catch (err) {
+      console.error('Logout failed', err)
+    }
   }
 
   return (
@@ -55,7 +67,9 @@ const DashboardTopbar = ({ title = 'Dashboard', role = 'employee' }) => {
               {title}
             </h1>
             <p className="text-[11px] text-base-content/60">
-              {role === 'hr' ? 'HR Manager workspace' : 'Employee workspace'}
+              {effectiveRole === 'hr'
+                ? 'HR Manager workspace'
+                : 'Employee workspace'}
             </p>
           </div>
         </div>
@@ -77,11 +91,11 @@ const DashboardTopbar = ({ title = 'Dashboard', role = 'employee' }) => {
           </button>
 
           {/* User info */}
-          <div className="dropdown dropdown-end ">
+          <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
               <div className="w-9 rounded-full ring ring-brand-accent ring-offset-base-100 ring-offset-2">
                 <span className="flex items-center justify-center h-full text-xs font-semibold text-brand-deep">
-                  {user.name[0]}
+                  {userName[0]}
                 </span>
               </div>
             </label>
@@ -92,10 +106,10 @@ const DashboardTopbar = ({ title = 'Dashboard', role = 'employee' }) => {
               <li className="px-2 py-1">
                 <div className="flex flex-col gap-0.5">
                   <span className="font-semibold text-sm text-brand-deep">
-                    {user.name}
+                    {userName}
                   </span>
                   <span className="text-[11px] text-base-content/60 truncate">
-                    {user.email}
+                    {userEmail}
                   </span>
                 </div>
               </li>
@@ -103,7 +117,7 @@ const DashboardTopbar = ({ title = 'Dashboard', role = 'employee' }) => {
                 <hr className="my-1 border-base-200" />
               </li>
               <li>
-                {/* Later you can navigate to profile based on role */}
+                {/* Later: navigate to profile route based on role */}
                 <button className="text-xs text-base-content/80">
                   View profile
                 </button>

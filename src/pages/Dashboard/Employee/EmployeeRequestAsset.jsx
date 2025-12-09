@@ -1,52 +1,34 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Box, Building2, TypeIcon } from 'lucide-react'
-
-// Fake assets for UI
-const mockAvailableAssets = [
-  {
-    id: 'a1',
-    image:
-      'https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=400',
-    name: 'MacBook Air 13"',
-    type: 'Returnable',
-    companyName: 'GreenFrame Studio',
-    available: 3,
-  },
-  {
-    id: 'a2',
-    image:
-      'https://images.pexels.com/photos/196649/pexels-photo-196649.jpeg?auto=compress&cs=tinysrgb&w=400',
-    name: 'Noise-cancelling Headphones',
-    type: 'Returnable',
-    companyName: 'CloudNest Labs',
-    available: 5,
-  },
-  {
-    id: 'a3',
-    image:
-      'https://images.pexels.com/photos/37347/office-freelancer-computer-business-37347.jpeg?auto=compress&cs=tinysrgb&w=400',
-    name: 'Standing Desk',
-    type: 'Returnable',
-    companyName: 'Northwind Collective',
-    available: 1,
-  },
-  {
-    id: 'a4',
-    image:
-      'https://images.pexels.com/photos/37347/office-freelancer-computer-business-37347.jpeg?auto=compress&cs=tinysrgb&w=400',
-    name: 'Welcome Swag Kit',
-    type: 'Non-returnable',
-    companyName: 'GreenFrame Studio',
-    available: 10,
-  },
-]
+import Swal from 'sweetalert2'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useAvailableAssets } from '../../../hooks/useAvailableAssets'
+import { createRequest } from '../../../services/requestService'
 
 const EmployeeRequestAsset = () => {
+  const [search, setSearch] = useState('')
+  const [typeFilter, setTypeFilter] = useState('All')
   const [selectedAsset, setSelectedAsset] = useState(null)
   const [note, setNote] = useState('')
 
-  const handleOpenRequest = asset => {
+  const { data, isLoading, isError, error } = useAvailableAssets({
+    search,
+    type: typeFilter,
+  })
+
+  const availableAssets = data || []
+
+  const queryClient = useQueryClient()
+
+  const requestMutation = useMutation({
+    mutationFn: createRequest,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['available-assets'] })
+    },
+  })
+
+  const handleOpenRequest = (asset) => {
     setSelectedAsset(asset)
     setNote('')
     const dialog = document.getElementById('asset-request-modal')
@@ -57,13 +39,36 @@ const EmployeeRequestAsset = () => {
     const dialog = document.getElementById('asset-request-modal')
     dialog?.close()
     setSelectedAsset(null)
+    setNote('')
   }
 
-  const handleSubmitRequest = e => {
+  const handleSubmitRequest = async (e) => {
     e.preventDefault()
-    // UI-only: log selection
-    console.log('Requesting asset:', selectedAsset, 'Note:', note)
-    handleCloseModal()
+    if (!selectedAsset) return
+
+    try {
+      await requestMutation.mutateAsync({
+        assetId: selectedAsset._id,
+        note,
+      })
+
+      await Swal.fire({
+        title: 'Request submitted',
+        text: 'Your asset request has been created and is pending HR approval.',
+        icon: 'success',
+        timer: 1600,
+        showConfirmButton: false,
+      })
+
+      handleCloseModal()
+    } catch (err) {
+      console.error(err)
+      await Swal.fire({
+        title: 'Error',
+        text: err.response?.data?.message || 'Failed to submit request',
+        icon: 'error',
+      })
+    }
   }
 
   return (
@@ -81,59 +86,94 @@ const EmployeeRequestAsset = () => {
             a request.
           </p>
         </div>
-        <p className="text-xs text-base-content/60">
-          Showing {mockAvailableAssets.length} available assets
-        </p>
+        <div className="flex flex-wrap items-center gap-2">
+          <input
+            type="text"
+            placeholder="Search assets"
+            className="input input-sm input-bordered w-44 md:w-60"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <select
+            className="select select-sm select-bordered w-40"
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+          >
+            <option value="All">All types</option>
+            <option value="Returnable">Returnable</option>
+            <option value="Non-returnable">Non-returnable</option>
+          </select>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {mockAvailableAssets.map(asset => (
-          <motion.div
-            key={asset.id}
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.3 }}
-            className="card-glass-brand overflow-hidden flex flex-col"
-          >
-            <figure className="h-40 bg-base-200/60">
-              <img
-                src={asset.image}
-                alt={asset.name}
-                className="w-full h-full object-cover"
-              />
-            </figure>
-            <div className="p-4 flex flex-col gap-2 flex-1">
-              <div className="flex items-start justify-between gap-2">
-                <h3 className="text-sm font-semibold text-brand-deep">
-                  {asset.name}
-                </h3>
-                <span className="badge badge-xs badge-outline border-brand-main/60 text-brand-main">
-                  {asset.type}
-                </span>
-              </div>
-              <div className="flex items-center gap-2 text-xs text-base-content/70">
-                <Building2 className="w-3 h-3" />
-                <span>{asset.companyName}</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs text-base-content/70">
-                <Box className="w-3 h-3" />
-                <span>Available: {asset.available}</span>
-              </div>
-              <div className="mt-auto pt-2">
-                <button
-                  type="button"
-                  onClick={() => handleOpenRequest(asset)}
-                  className="btn-gradient-primary w-full flex items-center justify-center gap-2 text-xs"
-                >
-                  <TypeIcon className="w-4 h-4" />
-                  Request this asset
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
+      {isLoading && (
+        <div className="card-glass-brand p-6 text-sm text-base-content/70">
+          Loading available assets...
+        </div>
+      )}
+
+      {isError && (
+        <div className="card-glass-brand p-6 text-sm text-error">
+          Failed to load assets: {error?.message || 'Unknown error'}
+        </div>
+      )}
+
+      {!isLoading && !isError && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {availableAssets.length === 0 ? (
+            <p className="text-sm text-base-content/70">
+              No assets currently available for request.
+            </p>
+          ) : (
+            availableAssets.map((asset) => (
+              <motion.div
+                key={asset._id}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.3 }}
+                className="card-glass-brand overflow-hidden flex flex-col"
+              >
+                <figure className="h-40 bg-base-200/60">
+                  <img
+                    src={asset.productImage}
+                    alt={asset.productName}
+                    className="w-full h-full object-cover"
+                  />
+                </figure>
+                <div className="p-4 flex flex-col gap-2 flex-1">
+                  <div className="flex items-start justify-between gap-2">
+                    <h3 className="text-sm font-semibold text-brand-deep">
+                      {asset.productName}
+                    </h3>
+                    <span className="badge badge-xs badge-outline border-brand-main/60 text-brand-main">
+                      {asset.productType}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-base-content/70">
+                    <Building2 className="w-3 h-3" />
+                    <span>{asset.companyName}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-base-content/70">
+                    <Box className="w-3 h-3" />
+                    <span>Available: {asset.availableQuantity}</span>
+                  </div>
+                  <div className="mt-auto pt-2">
+                    <button
+                      type="button"
+                      onClick={() => handleOpenRequest(asset)}
+                      className="btn-gradient-primary w-full flex items-center justify-center gap-2 text-xs"
+                    >
+                      <TypeIcon className="w-4 h-4" />
+                      Request this asset
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            ))
+          )}
+        </div>
+      )}
 
       {/* Request modal */}
       <dialog id="asset-request-modal" className="modal">
@@ -149,11 +189,11 @@ const EmployeeRequestAsset = () => {
           {selectedAsset && (
             <>
               <h3 className="font-semibold text-brand-deep mb-2">
-                Request: {selectedAsset.name}
+                Request: {selectedAsset.productName}
               </h3>
               <p className="text-xs text-base-content/70 mb-3">
                 Company: {selectedAsset.companyName} · Type:{' '}
-                {selectedAsset.type}
+                {selectedAsset.productType}
               </p>
               <form onSubmit={handleSubmitRequest} className="space-y-3">
                 <div className="form-control">
@@ -167,14 +207,17 @@ const EmployeeRequestAsset = () => {
                     rows={3}
                     placeholder="E.g., Needed for remote work, design work, etc."
                     value={note}
-                    onChange={e => setNote(e.target.value)}
+                    onChange={(e) => setNote(e.target.value)}
                   />
                 </div>
                 <button
                   type="submit"
                   className="btn-gradient-primary w-full text-sm"
+                  disabled={requestMutation.isLoading}
                 >
-                  Submit request
+                  {requestMutation.isLoading
+                    ? 'Submitting...'
+                    : 'Submit request'}
                 </button>
               </form>
             </>
