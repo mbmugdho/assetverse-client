@@ -40,7 +40,7 @@ const DashboardTopbar = ({ title = 'Dashboard', role = 'employee' }) => {
   }
 
   return (
-    <header className="w-full border-b border-base-200 bg-base-100/50 shadow-sm backdrop-blur">
+    <header className="w-full border-b border-base-200 bg-base-100/50 shadow-sm backdrop-blur relative z-[9999]">
       <div className="flex items-center justify-between px-4 lg:px-6 py-3 gap-3">
         {/* Left: drawer toggle (mobile) + title */}
         <div className="flex items-center gap-3">
@@ -77,7 +77,7 @@ const DashboardTopbar = ({ title = 'Dashboard', role = 'employee' }) => {
           </button>
 
           {/* User info */}
-          <div className="dropdown dropdown-end">
+          <div className="dropdown dropdown-end ">
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
               <div className="w-9 rounded-full ring ring-brand-accent ring-offset-base-100 ring-offset-2">
                 <span className="flex items-center justify-center h-full text-xs font-semibold text-brand-deep">

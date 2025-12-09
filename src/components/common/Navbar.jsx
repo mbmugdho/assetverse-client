@@ -1,4 +1,3 @@
-// src/components/common/Navbar.jsx
 import { useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { Menu, SunMedium, MoonStar } from 'lucide-react'
