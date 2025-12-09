@@ -1,51 +1,34 @@
-import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Users, Trash2 } from 'lucide-react'
 import Swal from 'sweetalert2'
-
-const mockEmployees = [
-  {
-    id: 'e1',
-    name: 'Alex Johnson',
-    email: 'alex@example.com',
-    joinDate: '2025-01-15',
-    assetsCount: 3,
-    avatar: 'https://i.pravatar.cc/100?img=11',
-  },
-  {
-    id: 'e2',
-    name: 'Maya Chen',
-    email: 'maya@greenframe.io',
-    joinDate: '2024-11-02',
-    assetsCount: 2,
-    avatar: 'https://i.pravatar.cc/100?img=12',
-  },
-  {
-    id: 'e3',
-    name: 'Daniel Lee',
-    email: 'daniel@cloudnest.dev',
-    joinDate: '2025-01-05',
-    assetsCount: 1,
-    avatar: 'https://i.pravatar.cc/100?img=13',
-  },
-]
-
-const packageLimit = 10
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useHREmployees } from '../../../hooks/useHREmployees'
+import { removeEmployeeFromTeam } from '../../../services/affiliationService'
 
 const HREmployees = () => {
-  const [employees, setEmployees] = useState(mockEmployees)
+  const { data, isLoading, isError, error } = useHREmployees()
+  const employees = data || []
+
+  const queryClient = useQueryClient()
+
+  const removeMutation = useMutation({
+    mutationFn: removeEmployeeFromTeam,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['hr-employees'] })
+    },
+  })
 
   const currentEmployees = employees.length
 
-  const confirmRemoveEmployee = async (emp) => {
+  const confirmRemoveEmployee = async emp => {
     const result = await Swal.fire({
       title: 'Remove employee from team?',
       html: `
         <div style="text-align:left;font-size:13px;line-height:1.4">
-          <strong>${emp.name}</strong><br/>
-          ${emp.email}<br/>
+          <strong>${emp.employeeName || emp.employeeEmail}</strong><br/>
+          ${emp.employeeEmail}<br/>
           <small style="color:#6b7280">
-            In the real app, you should also review their active assets before removal.
+            This will mark the employee's affiliation as inactive and return any active assets.
           </small>
         </div>
       `,
@@ -54,22 +37,31 @@ const HREmployees = () => {
       confirmButtonText: 'Remove',
       cancelButtonText: 'Cancel',
       reverseButtons: true,
-      confirmButtonColor: '#e11d48', // red
+      confirmButtonColor: '#e11d48',
       cancelButtonColor: '#6b7280',
       background: '#ffffff',
     })
 
     if (result.isConfirmed) {
-      // UI-only: update state
-      setEmployees((prev) => prev.filter((e) => e.id !== emp.id))
-
-      await Swal.fire({
-        title: 'Removed',
-        text: 'The employee has been removed from your team (UI only).',
-        icon: 'success',
-        timer: 1400,
-        showConfirmButton: false,
-      })
+      try {
+        await removeMutation.mutateAsync(emp._id)
+        await Swal.fire({
+          title: 'Removed',
+          text: 'The employee has been removed from your team (active assets returned).',
+          icon: 'success',
+          timer: 1400,
+          showConfirmButton: false,
+        })
+      } catch (err) {
+        console.error(err)
+        await Swal.fire({
+          title: 'Error',
+          text:
+            err.response?.data?.message ||
+            'Failed to remove employee. Try again later.',
+          icon: 'error',
+        })
+      }
     }
   }
 
@@ -89,61 +81,79 @@ const HREmployees = () => {
         </div>
         <div className="text-xs text-base-content/70 flex items-center gap-2">
           <Users className="w-4 h-4 text-brand-main" />
-          <span>
-            {currentEmployees}/{packageLimit} employees used
-          </span>
+          <span>{currentEmployees} employees in your team</span>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {employees.length === 0 ? (
-          <p className="text-sm text-base-content/70">
-            No employees affiliated yet. Approve asset requests to build your
-            team.
-          </p>
-        ) : (
-          employees.map((emp) => (
-            <motion.div
-              key={emp.id}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.3 }}
-              className="card-glass-brand p-4 flex flex-col gap-3"
-            >
-              <div className="flex items-center gap-3">
-                <div className="avatar">
-                  <div className="w-10 h-10 rounded-full">
-                    <img src={emp.avatar} alt={emp.name} />
+      {isLoading && (
+        <div className="card-glass-brand p-6 text-sm text-base-content/70">
+          Loading employees...
+        </div>
+      )}
+
+      {isError && (
+        <div className="card-glass-brand p-6 text-sm text-error">
+          Failed to load employees: {error?.message || 'Unknown error'}
+        </div>
+      )}
+
+      {!isLoading && !isError && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {employees.length === 0 ? (
+            <p className="text-sm text-base-content/70">
+              No employees affiliated yet. Approve asset requests to build your
+              team.
+            </p>
+          ) : (
+            employees.map(emp => (
+              <motion.div
+                key={emp._id}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.3 }}
+                className="card-glass-brand p-4 flex flex-col gap-3"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="avatar">
+                    <div className="w-10 h-10 rounded-full bg-base-200 flex items-center justify-center text-xs font-semibold text-brand-main">
+                      {(emp.employeeName || emp.employeeEmail)[0]}
+                    </div>
+                  </div>
+                  <div className="space-y-0.5">
+                    <p className="text-sm font-semibold text-brand-deep">
+                      {emp.employeeName || emp.employeeEmail}
+                    </p>
+                    <p className="text-[11px] text-base-content/70">
+                      {emp.employeeEmail}
+                    </p>
                   </div>
                 </div>
-                <div className="space-y-0.5">
-                  <p className="text-sm font-semibold text-brand-deep">
-                    {emp.name}
-                  </p>
-                  <p className="text-[11px] text-base-content/70">
-                    {emp.email}
-                  </p>
+                <div className="flex items-center justify-between text-[11px] text-base-content/70">
+                  <span>
+                    Affiliated:{' '}
+                    {emp.affiliationDate
+                      ? new Date(emp.affiliationDate).toLocaleDateString()
+                      : '—'}
+                  </span>
+                  <span>Assets: {emp.assetsCount || 0}</span>
                 </div>
-              </div>
-              <div className="flex items-center justify-between text-[11px] text-base-content/70">
-                <span>Joined: {emp.joinDate}</span>
-                <span>Assets: {emp.assetsCount}</span>
-              </div>
-              <div className="mt-auto pt-1 flex justify-end">
-                <button
-                  type="button"
-                  className="btn btn-ghost btn-xs gap-1 text-error"
-                  onClick={() => confirmRemoveEmployee(emp)}
-                >
-                  <Trash2 className="w-3 h-3" />
-                  Remove from team
-                </button>
-              </div>
-            </motion.div>
-          ))
-        )}
-      </div>
+                <div className="mt-auto pt-1 flex justify-end">
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-xs gap-1 text-error"
+                    onClick={() => confirmRemoveEmployee(emp)}
+                    disabled={removeMutation.isLoading}
+                  >
+                    <Trash2 className="w-3 h-3" />
+                    Remove from team
+                  </button>
+                </div>
+              </motion.div>
+            ))
+          )}
+        </div>
+      )}
     </motion.div>
   )
 }
