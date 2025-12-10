@@ -2,7 +2,7 @@ import { Mail, Phone } from 'lucide-react'
 
 const ContactCTASection = () => {
   return (
-    <section className="py-14 md:py-18 bg-section-soft2">
+    <section className=" py-8 md:py-12">
       <div className="container-x">
         <div className="card-glass-brand px-6 py-8 md:px-10 md:py-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div>

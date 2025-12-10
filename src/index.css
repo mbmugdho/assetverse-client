@@ -4,18 +4,20 @@
 
 /* ---------------- Base ---------------- */
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     font-family: 'Montserrat', sans-serif;
     @apply min-h-screen bg-base-100 text-base-content antialiased;
   }
-
-  html {
-    scroll-behavior: smooth;
-  }
 }
 
-/* DARK THEME OVERRIDES FOR CUSTOM CLASSES */
+/* ---------------- Utilities ---------------- */
 @layer utilities {
+  /* ========== DARK THEME OVERRIDES FOR CUSTOM CLASSES ========== */
+
   /* Hero background in dark mode */
   html[data-theme='dark'] .bg-hero-surface {
     background: radial-gradient(
@@ -89,7 +91,7 @@
     background-color: #3b5f3e;
   }
 
-  /* Badge + gradient helpers still readable on dark */
+  /* Badge in dark mode */
   html[data-theme='dark'] .badge-brand {
     @apply text-xs font-semibold;
     background-image: linear-gradient(
@@ -99,16 +101,15 @@
     );
     color: #0b1120;
   }
-}
 
-/* ---------------- Utilities ---------------- */
-@layer utilities {
-  /* Container */
+  /* ========== LAYOUT / CONTAINER ========== */
+
   .container-x {
     @apply w-full max-w-7xl mx-auto px-4;
   }
 
-  /* -------- Brand Colors (plain) -------- */
+  /* ========== BRAND COLORS (PLAIN) ========== */
+
   .bg-brand-deep {
     background-color: #2f5233;
   }
@@ -124,6 +125,7 @@
   .bg-brand-soft {
     background-color: #beeac5;
   }
+
   .bg-brand-soft2 {
     background-color: #d4f0d1;
   }
@@ -144,9 +146,9 @@
     color: #beeac5;
   }
 
-  /* -------- Gradient Backgrounds -------- */
+  /* ========== BACKGROUND GRADIENTS ========== */
 
-  /* Hero section background: soft green gradient with a subtle radial glow */
+  /* Hero section background */
   .bg-hero-surface {
     background: radial-gradient(
         600px 400px at 0% 0%,
@@ -161,25 +163,62 @@
       linear-gradient(135deg, #beeac5 0%, #ffffff 40%, #e8f7ec 100%);
   }
 
-  /* Section background, softer than hero */
+  /* Slightly softer section backgrounds */
   .bg-section-soft {
-    background: linear-gradient(135deg, #beeac5 0%, #f4fff7 40%, #ffffff 100%);
-  }
-  .bg-section-soft2 {
-    background: linear-gradient(135deg, #ffffff 0%, #f4fff7 40%, #beeac5 100%);
+    background: linear-gradient(
+      135deg,
+      #f7fff9 0%,
+      #ecf8f0 30%,
+      #dff1e4 60%,
+      #cbe7d4 85%,
+      #beeac5 100%
+    );
   }
 
-  /* -------- Gradient Text (for hero heading spans) -------- */
+  .bg-section-soft2 {
+    background: linear-gradient(
+      135deg,
+      #f7fff9 0%,
+      #dff1e4 25%,
+      #beeac5 50%,
+      #cbe7d4 75%,
+      #ecf8f0 100%
+    );
+  }
+
+  /* Hero gradient text */
+  /* Animated hero gradient text */
   .text-gradient-hero {
-    background-image: linear-gradient(90deg, #2f5233, #337b01, #76b947);
+    background-image: linear-gradient(
+      45deg,
+      #133117,
+      #3f9402,
+      #86d151,
+      #3f9402,
+      #133117
+    );
+    background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    animation: hero-gradient-move 3.5s ease-in-out infinite;
   }
 
-  /* -------- Gradient Buttons -------- */
+  @keyframes hero-gradient-move {
+    0% {
+      background-position: 0% center;
+    }
+    50% {
+      background-position: 100% center;
+    }
+    100% {
+      background-position: 0% center;
+    }
+  }
 
-  /* Solid gradient button (primary CTA) */
+  /* ========== BUTTONS ========== */
+
+  /* Solid gradient primary button */
   .btn-gradient-primary {
     @apply inline-flex items-center justify-center font-semibold px-5 py-2.5 rounded-full shadow-md transition-all duration-300 text-white;
     background-image: linear-gradient(90deg, #2f5233, #337b01, #76b947);
@@ -196,7 +235,7 @@
     box-shadow: none;
   }
 
-  /* Outline-style gradient-ish button (secondary CTA) */
+  /* Outline-style button */
   .btn-gradient-outline {
     @apply inline-flex items-center justify-center font-semibold px-5 py-2.5 rounded-full border transition-all duration-300 bg-transparent;
     border-color: rgba(47, 82, 51, 0.4);
@@ -213,7 +252,8 @@
     color: #2f5233;
   }
 
-  /* -------- Small Brand Chip / Badge -------- */
+  /* ========== BADGES / CHIPS ========== */
+
   .badge-brand {
     @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold;
     background-image: linear-gradient(
@@ -224,8 +264,64 @@
     color: #2f5233;
   }
 
-  /* -------- Card Style (for hero stats / feature cards) -------- */
+  /* ========== CARDS ========== */
+
   .card-glass-brand {
     @apply rounded-2xl border border-base-200/60 bg-white/70 backdrop-blur shadow-md;
+  }
+
+  /* ========== ANIMATIONS ========== */
+
+  /* Soft float animation (for hero visuals, etc.) */
+  .animate-float-soft {
+    animation: float-soft 6s ease-in-out infinite;
+  }
+
+  @keyframes float-soft {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+
+  /* Animated hero background glow */
+  .bg-hero-animated {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bg-hero-animated::before {
+    content: '';
+    position: absolute;
+    inset: -40%;
+    background: radial-gradient(
+      circle at 0% 0%,
+      rgba(118, 185, 71, 0.12),
+      transparent 60%
+    );
+    opacity: 0.5;
+    animation: hero-glow 12s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  @keyframes hero-glow {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+      opacity: 0.4;
+    }
+    50% {
+      transform: translate3d(10px, -10px, 0) scale(1.05);
+      opacity: 0.6;
+    }
+    100% {
+      transform: translate3d(-10px, 10px, 0) scale(1.02);
+      opacity: 0.5;
+    }
   }
 }

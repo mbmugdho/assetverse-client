@@ -23,7 +23,7 @@ const faqs = [
 
 const FAQSection = () => {
   return (
-    <section className="py-16 md:py-20 bg-section-soft">
+    <section className="py-16 md:py-20 ">
       <div className="container-x grid grid-cols-1 md:grid-cols-[1.1fr,1.4fr] gap-10 items-start">
         <div>
           <p className="text-s uppercase tracking-[0.18em] text-brand-main font-semibold">
@@ -42,7 +42,7 @@ const FAQSection = () => {
           {faqs.map(item => (
             <div
               key={item.question}
-              className="collapse collapse-arrow bg-base-100 border border-base-200 rounded-2xl"
+              className="collapse collapse-arrow bg-base-100/60 shadow-sm border border-base-200 rounded-4xl"
             >
               <input type="checkbox" />
               <div className="collapse-title text-sm md:text-base font-semibold text-brand-deep">

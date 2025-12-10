@@ -64,7 +64,7 @@ const slides = [
 
 const HeroSection = () => {
   return (
-    <section className="bg-hero-surface">
+    <section className="">
       <div className="container-x py-16 md:py-24 lg:py-28 grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-center">
         {/* Left: Text & CTAs */}
         <motion.div
@@ -82,7 +82,7 @@ const HeroSection = () => {
           {/* Heading */}
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-brand-deep">
             Control every{' '}
-            <span className="text-gradient-hero">device, desk, and detail</span>{' '}
+            <span className="text-gradient-hero">device, desk, and detail </span> {' '}
             from one place.
           </h1>
 

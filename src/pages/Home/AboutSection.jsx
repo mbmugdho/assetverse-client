@@ -24,7 +24,7 @@ const benefits = [
 
 const AboutSection = () => {
   return (
-    <section className="bg-section-soft2">
+    <section className="">
       <div className="container-x py-14 md:py-18 lg:py-20 grid grid-cols-1 md:grid-cols-[1.2fr,1fr] gap-10 items-center">
         <motion.div
           initial={{ opacity: 0, y: 18 }}

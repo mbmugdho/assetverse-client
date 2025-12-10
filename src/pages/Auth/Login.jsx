@@ -11,7 +11,7 @@ const Login = () => {
   const [error, setError] = useState('')
   const navigate = useNavigate()
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
     const form = e.target
@@ -23,7 +23,7 @@ const Login = () => {
       const user = await login({ email, password })
 
       if (user.role === 'hr') {
-        navigate('/dashboard/hr/assets', { replace: true })
+        navigate('/dashboard/hr/analytics', { replace: true })
       } else {
         navigate('/dashboard/employee/my-assets', { replace: true })
       }
@@ -43,7 +43,7 @@ const Login = () => {
 
       if (result.status === 'existing') {
         if (result.role === 'hr') {
-          navigate('/dashboard/hr/assets', { replace: true })
+          navigate('/dashboard/hr/analytics', { replace: true })
         } else {
           navigate('/dashboard/employee/my-assets', { replace: true })
         }
@@ -67,7 +67,7 @@ const Login = () => {
   const disabled = isLoading || formLoading
 
   return (
-    <section className="bg-base-100">
+    <section className="bg-section-soft2">
       <div className="container-x py-12 md:py-16 lg:py-20">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -159,9 +159,7 @@ const Login = () => {
                 </label>
               </div>
 
-              {error && (
-                <p className="text-xs text-error mt-1">{error}</p>
-              )}
+              {error && <p className="text-xs text-error mt-1">{error}</p>}
 
               <button
                 type="submit"

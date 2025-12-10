@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Mail, Phone } from 'lucide-react'
 import { FaFacebook, FaInstagram } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import logo from '../../assets/logos/logo.png'
 
 
@@ -9,16 +10,16 @@ const Footer = () => {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="border-t border-base-200 bg-section-soft">
+    <footer className=" bg-section-soft2">
       {/* Main footer content */}
       <div className="container-x py-8 md:py-10 grid grid-cols-1 md:grid-cols-3 gap-15">
         {/* Brand + description */}
         <div className="space-y-3">
           <Link
             to="/"
-            className="inline-flex items-baseline gap-1.5 hover:opacity-90 transition-opacity"
+            className="inline-flex items-center gap-1.5 hover:opacity-90 transition-opacity"
           >
-            <img src={logo} alt="AssetVerse Logo" className="w-8 h-6" />
+            <img src={logo} alt="AssetVerse Logo" className="w-9 h-8" />
             <span className="text-lg font-semibold tracking-tight text-brand-deep">
               Asset
             </span>
@@ -133,7 +134,7 @@ const Footer = () => {
                 aria-label="X (Twitter) login"
                 className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-base-200 hover:bg-brand-main/10 border border-base-300 hover:border-brand-main transition-colors"
               >
-               
+               <FaXTwitter className="w-4 h-4 text-base-content/80" />
               </a>
             </div>
           </div>

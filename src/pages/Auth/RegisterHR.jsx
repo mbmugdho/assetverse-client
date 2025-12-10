@@ -44,7 +44,7 @@ const RegisterHR = () => {
   const disabled = isLoading || formLoading
 
   return (
-    <section className="bg-base-100">
+    <section className="bg-section-soft2">
       <div className="container-x py-12 md:py-16 lg:py-20">
         <motion.div
           initial={{ opacity: 0, y: 24 }}

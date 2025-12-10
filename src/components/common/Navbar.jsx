@@ -42,8 +42,8 @@ const Navbar = () => {
   const navLinkClass = ({ isActive }) =>
     `px-3 py-2 text-sm font-medium rounded-full transition-colors ${
       isActive
-        ? 'bg-brand-deep text-brand-soft shadow-sm'
-        : 'text-base-content/80 hover:bg-base-200 hover:text-brand-deep'
+        ? 'bg-brand-accent text-brand-soft shadow-sm'
+        : 'text-base-content hover:bg-base-200 hover:text-brand-deep'
     }`
 
   const publicLinks = (
@@ -67,7 +67,7 @@ const Navbar = () => {
   )
 
   const mobileMenu = (
-    <ul className="menu menu-sm dropdown-content mt-3 z-[50] p-3 rounded-2xl bg-base-100 shadow-lg border border-base-300 w-64">
+    <ul className="menu menu-sm dropdown-content mt-3 z-[50] p-3 rounded-2xl bg-section-soft2 shadow-lg border border-base-300 w-64">
       {publicLinks}
       {!user && (
         <li className="mt-1">
@@ -206,7 +206,7 @@ const Navbar = () => {
                 to="/dashboard/employee/my-assets"
                 className={({ isActive }) =>
                   `text-sm ${
-                    isActive ? 'text-brand-main' : 'text-base-content/80'
+                    isActive ? 'text-brand-accent' : 'text-base-content/80'
                   }`
                 }
               >
@@ -218,7 +218,7 @@ const Navbar = () => {
                 to="/dashboard/employee/request-asset"
                 className={({ isActive }) =>
                   `text-sm ${
-                    isActive ? 'text-brand-main' : 'text-base-content/80'
+                    isActive ? 'text-brand-accent' : 'text-base-content/80'
                   }`
                 }
               >
@@ -230,7 +230,7 @@ const Navbar = () => {
                 to="/dashboard/employee/my-team"
                 className={({ isActive }) =>
                   `text-sm ${
-                    isActive ? 'text-brand-main' : 'text-base-content/80'
+                    isActive ? 'text-brand-accent' : 'text-base-content/80'
                   }`
                 }
               >
@@ -242,7 +242,7 @@ const Navbar = () => {
                 to="/dashboard/employee/profile"
                 className={({ isActive }) =>
                   `text-sm ${
-                    isActive ? 'text-brand-main' : 'text-base-content/80'
+                    isActive ? 'text-brand-accent' : 'text-base-content/80'
                   }`
                 }
               >
@@ -259,7 +259,7 @@ const Navbar = () => {
                 to="/dashboard/hr/assets"
                 className={({ isActive }) =>
                   `text-sm ${
-                    isActive ? 'text-brand-main' : 'text-base-content/80'
+                    isActive ? 'text-brand-accent' : 'text-base-content/80'
                   }`
                 }
               >
@@ -271,7 +271,7 @@ const Navbar = () => {
                 to="/dashboard/hr/assets/add"
                 className={({ isActive }) =>
                   `text-sm ${
-                    isActive ? 'text-brand-main' : 'text-base-content/80'
+                    isActive ? 'text-brand-accent' : 'text-base-content/80'
                   }`
                 }
               >
@@ -283,7 +283,7 @@ const Navbar = () => {
                 to="/dashboard/hr/requests"
                 className={({ isActive }) =>
                   `text-sm ${
-                    isActive ? 'text-brand-main' : 'text-base-content/80'
+                    isActive ? 'text-brand-accent' : 'text-base-content/80'
                   }`
                 }
               >
@@ -295,7 +295,7 @@ const Navbar = () => {
                 to="/dashboard/hr/employees"
                 className={({ isActive }) =>
                   `text-sm ${
-                    isActive ? 'text-brand-main' : 'text-base-content/80'
+                    isActive ? 'text-brand-accent' : 'text-base-content/80'
                   }`
                 }
               >
@@ -307,7 +307,7 @@ const Navbar = () => {
                 to="/dashboard/hr/upgrade-package"
                 className={({ isActive }) =>
                   `text-sm ${
-                    isActive ? 'text-brand-main' : 'text-base-content/80'
+                    isActive ? 'text-brand-accent' : 'text-base-content/80'
                   }`
                 }
               >
@@ -319,7 +319,7 @@ const Navbar = () => {
                 to="/dashboard/hr/profile"
                 className={({ isActive }) =>
                   `text-sm ${
-                    isActive ? 'text-brand-main' : 'text-base-content/80'
+                    isActive ? 'text-brand-accent' : 'text-base-content/80'
                   }`
                 }
               >
@@ -345,7 +345,7 @@ const Navbar = () => {
   const isDark = theme === DARK_THEME
 
   return (
-    <header className="sticky top-0 z-40 bg-base-100/50 backdrop-blur border-b border-base-200 shadow-sm">
+    <header className="sticky top-0 z-40 bg-base-100/40 backdrop-blur border-b border-base-200 shadow-sm">
       <nav className="container-x flex items-center justify-between py-3">
         {/* Left: brand + mobile menu */}
         <div className="flex items-center gap-2">
@@ -362,7 +362,7 @@ const Navbar = () => {
             to="/"
             className="flex items-center gap-1.5 hover:opacity-90 transition-opacity"
           >
-            <img src={logo} alt="AssetVerse Logo" className="w-8 h-6" />
+            <img src={logo} alt="AssetVerse Logo" className="w-9 h-8" />
             <span className="text-lg md:text-xl font-bold tracking-tight text-brand-deep">
               Asset
             </span>

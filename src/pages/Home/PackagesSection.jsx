@@ -33,7 +33,7 @@ const packages = [
 
 const PackagesSection = () => {
   return (
-    <section className="py-16 md:py-20 bg-section-soft">
+    <section className="py-16 md:py-20 ">
       <div className="container-x">
         <div className="text-center max-w-2xl mx-auto mb-10 md:mb-12">
           <p className="text-s uppercase tracking-[0.18em] text-brand-main font-semibold">
@@ -56,7 +56,7 @@ const PackagesSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.4, delay: index * 0.08 }}
-              className={`relative card-glass-brand flex flex-col ${
+              className={`relative card-glass-brand card-glass-brand-hover  flex flex-col ${
                 pkg.isPopular
                   ? 'border-brand-main shadow-lg shadow-brand-main/15'
                   : ''

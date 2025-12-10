@@ -1,5 +1,7 @@
+import React from 'react'
 import { motion } from 'framer-motion'
 import { Quote } from 'lucide-react'
+import Marquee from 'react-fast-marquee'
 
 import logo1 from '../../assets/logos/logo1.png'
 import logo2 from '../../assets/logos/logo2.png'
@@ -7,6 +9,10 @@ import logo3 from '../../assets/logos/logo3.png'
 import logo4 from '../../assets/logos/logo4.png'
 import logo5 from '../../assets/logos/logo5.png'
 import logo6 from '../../assets/logos/logo6.png'
+import logo7 from '../../assets/logos/logo7.png'
+import logo8 from '../../assets/logos/logo8.png'
+import logo9 from '../../assets/logos/logo9.png'
+import logo10 from '../../assets/logos/logo10.png'
 
 const stats = [
   { label: 'Companies onboarded', value: '100+' },
@@ -41,11 +47,11 @@ const testimonials = [
   },
 ]
 
-const clientLogos = [logo1, logo2, logo3, logo4, logo5, logo6]
+const clientLogos = [logo1, logo2, logo3, logo4, logo5, logo6, logo7, logo8, logo9, logo10]
 
 const TestimonialsSection = () => {
   return (
-    <section className="py-16 md:py-20 bg-section-soft">
+    <section className="py-16 md:py-20 ">
       <div className="container-x space-y-10 md:space-y-12">
         {/* Top heading + logo strip */}
         <div className="space-y-4">
@@ -67,17 +73,25 @@ const TestimonialsSection = () => {
             <p className="text-xs text-base-content/60 mb-2">
               Companies that trust platforms like AssetVerse:
             </p>
+
             <div className="card-glass-brand px-4 py-3">
-              <div className="flex flex-wrap items-center justify-center md:justify-between gap-4">
-                {clientLogos.map((logo, idx) => (
-                  <img
-                    key={idx}
-                    src={logo}
-                    alt={`Client logo ${idx + 1}`}
-                    className="h-7 md:h-8 object-contain opacity-80 hover:opacity-100 transition-opacity"
-                  />
-                ))}
-              </div>
+              <Marquee
+                gradient={false}
+                speed={100}
+                pauseOnHover={true}
+                className="p-2"
+              >
+                <div className="flex flex-wrap items-center justify-center md:justify-between gap-30 px-10">
+                  {clientLogos.map((logo, idx) => (
+                    <img
+                      key={idx}
+                      src={logo}
+                      alt={`Client logo ${idx + 1}`}
+                      className="h-7 md:h-8 object-contain opacity-80 hover:opacity-100 transition-opacity"
+                    />
+                  ))}
+                </div>
+              </Marquee>
             </div>
           </div>
         </div>

@@ -49,7 +49,7 @@ const features = [
 
 const FeaturesSection = () => {
   return (
-    <section className="py-16 md:py-20 bg-section-soft2">
+    <section className="py-16 md:py-20 ">
       <div className="container-x">
         <div className="max-w-2xl mb-10 md:mb-12">
           <p className="text-s uppercase tracking-[0.18em] text-brand-main font-semibold">
