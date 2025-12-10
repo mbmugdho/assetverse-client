@@ -46,14 +46,14 @@ const Sidebar = ({ role = 'employee' }) => {
               <NavLink
                 to={
                   role === 'hr'
-                    ? '/dashboard/hr/assets'
+                    ? '/dashboard/hr/analytics'
                     : '/dashboard/employee/my-assets'
                 }
                 className={navItemClass}
                 end
               >
                 <LayoutDashboard className="w-4 h-4" />
-                <span>Dashboard</span>
+                <span>Analytics</span>
               </NavLink>
             </li>
           </ul>

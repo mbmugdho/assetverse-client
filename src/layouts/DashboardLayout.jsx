@@ -15,6 +15,7 @@ const resolveTitleFromPath = (pathname) => {
   if (pathname.startsWith('/dashboard/employee/my-team')) return 'My Team'
   if (pathname.startsWith('/dashboard/employee/profile')) return 'My Profile'
 
+  if (pathname.startsWith('/dashboard/hr/analytics')) return 'Analytics'
   if (pathname.startsWith('/dashboard/hr/assets/add')) return 'Add Asset'
   if (pathname.startsWith('/dashboard/hr/assets')) return 'Asset List'
   if (pathname.startsWith('/dashboard/hr/requests')) return 'All Requests'

@@ -17,6 +17,7 @@ import EmployeeMyTeam from '../pages/Dashboard/Employee/EmployeeMyTeam'
 import EmployeeProfile from '../pages/Dashboard/Employee/EmployeeProfile'
 import RequireEmployee from './RequireEmployee'
 // HR dashboard pages
+import HRAnalytics from '../pages/Dashboard/HR/HRAnalytics'
 import HRAssetsList from '../pages/Dashboard/HR/HRAssetsList'
 import HRAddAsset from '../pages/Dashboard/HR/HRAddAsset'
 import HRRequests from '../pages/Dashboard/HR/HRRequests'
@@ -77,6 +78,14 @@ const router = createBrowserRouter([
       },
 
       // HR
+      {
+        path: 'hr/analytics',                    
+        element: (
+          <RequireHR>
+            <HRAnalytics />
+          </RequireHR>
+        ),
+      },
       {
         path: 'hr/assets',
         element: (
