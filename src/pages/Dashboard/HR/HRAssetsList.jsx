@@ -92,7 +92,7 @@ const HRAssetsList = () => {
         <div>
           <h2 className="text-xl font-bold text-brand-deep">Asset List</h2>
           <p className="text-sm text-base-content/70">
-            Manage your company&apos;s asset inventory with search and
+            Manage your company's asset inventory with search and
             pagination.
           </p>
         </div>

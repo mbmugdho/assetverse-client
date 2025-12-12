@@ -18,13 +18,13 @@ const steps = [
     icon: Laptop2,
     title: 'Track, return, and report',
     description:
-      'Monitor what’s assigned, what’s returned, and who is responsible — with analytics for HR leaders.',
+      "Monitor what's assigned, what's returned, and who is responsible — with analytics for HR leaders.",
   },
 ]
 
 const HowItWorksSection = () => {
   return (
-    <section className="py-16 md:py-20 ">
+    <section className="py-5 md:py-5 ">
       <div className="container-x">
         <div className="text-center max-w-2xl mx-auto mb-10 md:mb-12">
           <p className="text-s uppercase tracking-[0.18em] text-brand-main font-semibold">

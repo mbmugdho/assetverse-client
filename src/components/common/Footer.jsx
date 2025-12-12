@@ -146,7 +146,7 @@ const Footer = () => {
         <div className="container-x py-4 flex flex-col md:flex-row gap-2 md:gap-0 items-center justify-between text-xs text-base-content/60">
           <p>© {year} AssetVerse. All rights reserved.</p>
           <p className="text-center md:text-right">
-            Built for HR, IT, and distributed teams who care about every asset.
+            Built for HR, IT, and finance teams who care about every asset.
           </p>
         </div>
       </div>

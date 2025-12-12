@@ -2,7 +2,6 @@ import { Outlet, useLocation } from 'react-router-dom'
 import Sidebar from '../components/dashboard/Sidebar'
 import DashboardTopbar from '../components/dashboard/DashboardTopbar'
 
-// TODO: replace with real role from auth context later
 const resolveRoleFromPath = (pathname) => {
   if (pathname.startsWith('/dashboard/hr')) return 'hr'
   return 'employee'

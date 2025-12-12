@@ -21,7 +21,6 @@ const DashboardTopbar = ({
   const [theme, setTheme] = useState(getInitialTheme)
   const navigate = useNavigate()
 
-  // Pull both backendUser (DB) and firebaseUser (Firebase/Google) from context
   const { backendUser, firebaseUser, role: ctxRole, logout } = useAuth()
 
   useEffect(() => {
@@ -31,12 +30,11 @@ const DashboardTopbar = ({
   }, [theme])
 
   const toggleTheme = () => {
-    setTheme((prev) => (prev === DARK_THEME ? LIGHT_THEME : DARK_THEME))
+    setTheme(prev => (prev === DARK_THEME ? LIGHT_THEME : DARK_THEME))
   }
 
   const isDark = theme === DARK_THEME
 
-  // Prefer role from context, fallback to prop
   const effectiveRole = ctxRole || roleProp || 'employee'
 
   const userName =
@@ -44,7 +42,6 @@ const DashboardTopbar = ({
     (effectiveRole === 'hr' ? 'HR Manager' : 'Employee User')
   const userEmail = backendUser?.email || 'user@example.com'
 
-  // Avatar source: DB profileImage > Google photoURL > null
   const avatarUrl = backendUser?.profileImage || firebaseUser?.photoURL || null
 
   const handleLogout = async () => {
@@ -62,6 +59,10 @@ const DashboardTopbar = ({
     } else {
       navigate('/dashboard/employee/profile')
     }
+  }
+
+  const handleGoHome = () => {
+    navigate('/')
   }
 
   return (
@@ -87,8 +88,16 @@ const DashboardTopbar = ({
           </div>
         </div>
 
-        {/* Right: theme toggle + user */}
+        {/* Right: theme toggle + Home + user */}
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleGoHome}
+            className="btn btn-gradient-primary btn-gradient-primary:hover hidden sm:inline-flex text-xs"
+          >
+            Home
+          </button>
+
           {/* Theme toggle */}
           <button
             type="button"

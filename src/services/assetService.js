@@ -23,5 +23,5 @@ export const fetchAvailableAssets = async ({ search = '', type = 'All' } = {}) =
   if (type && type !== 'All') params.type = type
 
   const res = await apiClient.get('/assets/available', { params })
-  return res.data // array of assets
+  return res.data 
 }

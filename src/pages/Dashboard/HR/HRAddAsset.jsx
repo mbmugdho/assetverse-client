@@ -37,7 +37,7 @@ const HRAddAsset = () => {
       await apiClient.post('/assets', {
         productName,
         productImage,
-        productType, // "Returnable" | "Non-returnable"
+        productType, 
         productQuantity: quantityNum,
       })
 

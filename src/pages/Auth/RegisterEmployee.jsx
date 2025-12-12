@@ -23,7 +23,6 @@ const RegisterEmployee = () => {
     try {
       setFormLoading(true)
       await registerEmployee({ name, email, password, dateOfBirth })
-      // After successful registration, go to login
       navigate('/login', { replace: true })
     } catch (err) {
       console.error(err)
@@ -140,7 +139,7 @@ const RegisterEmployee = () => {
                     name="password"
                     required
                     minLength={6}
-                    placeholder="••••••••"
+                    placeholder="******"
                     className="input input-bordered w-full pl-10"
                   />
                 </div>

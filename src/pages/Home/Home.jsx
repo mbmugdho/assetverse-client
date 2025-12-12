@@ -7,6 +7,9 @@ import HeroSection from './HeroSection'
 import HowItWorksSection from './HowItWorksSection'
 import PackagesSection from './PackagesSection'
 import TestimonialsSection from './TestimonialsSection'
+import UseCasesSection from './useCasesSection'
+import SecuritySection from './SecuritySection'
+import ComparisonSection from './ComparisonSection'
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -33,7 +36,6 @@ const Home = () => {
         <HeroSection />
       </motion.section>
 
-      {/* Rest of the page on soft background */}
       
         {/* Other sections: reveal on scroll */}
         <motion.section
@@ -93,7 +95,7 @@ const Home = () => {
           viewport={{ once: true, amount: 0.2 }}
           custom={6}
         >
-          <FAQSection />
+          <ComparisonSection />
         </motion.section>
 
         <motion.section
@@ -102,6 +104,36 @@ const Home = () => {
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
           custom={7}
+        >
+          <FAQSection />
+        </motion.section>
+
+        <motion.section
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          custom={8}
+        >
+          <UseCasesSection />
+        </motion.section>
+
+        <motion.section
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          custom={9}
+        >
+          <SecuritySection />
+        </motion.section>
+
+        <motion.section
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          custom={10}
         >
           <ContactCTASection />
         </motion.section>

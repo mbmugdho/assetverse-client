@@ -9,7 +9,7 @@ import {
 } from 'firebase/auth'
 import { auth } from '../firebase/firebase.config'
 import apiClient from '../services/apiClient'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query' // CHANGE: import useQueryClient
 
 const AuthContext = createContext(null)
 export const useAuth = () => useContext(AuthContext)
@@ -19,14 +19,21 @@ const googleProvider = new GoogleAuthProvider()
 export const AuthProvider = ({ children }) => {
   const [firebaseUser, setFirebaseUser] = useState(null)
   const [authLoading, setAuthLoading] = useState(true)
+  const queryClient = useQueryClient() 
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, user => {
       setFirebaseUser(user || null)
+
+      
+      if (!user) {
+        queryClient.removeQueries({ queryKey: ['me'] })
+      }
+
       setAuthLoading(false)
     })
     return () => unsubscribe()
-  }, [])
+  }, [queryClient]) 
 
   const {
     data: backendUser,
@@ -46,20 +53,14 @@ export const AuthProvider = ({ children }) => {
   // ========== Email/Password registration ==========
 
   const registerEmployee = async ({ name, email, password, dateOfBirth }) => {
-    // 1) Firebase signup
     const cred = await createUserWithEmailAndPassword(auth, email, password)
-
-    // 2) Backend user creation
     await apiClient.post('/users', {
       name,
       email,
       dateOfBirth,
       role: 'employee',
     })
-
-    // 3) Sign out so they go through normal login flow
     await signOut(auth)
-
     return cred
   }
 
@@ -89,7 +90,6 @@ export const AuthProvider = ({ children }) => {
 
   // ========== Email/Password login ==========
 
-  // Returns backend user (with role) so UI can redirect properly
   const login = async ({ email, password }) => {
     await signInWithEmailAndPassword(auth, email, password)
     await apiClient.post('/auth/jwt', { email })
@@ -121,7 +121,6 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (err) {
       if (err.response && err.response.status === 404) {
-        // Not in DB yet
         return {
           status: 'needsOnboarding',
           email,
@@ -167,7 +166,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await apiClient.post('/auth/logout')
-    } catch (e) {
+    } catch (err) {
       // ignore
     }
     await signOut(auth)
@@ -187,5 +186,5 @@ export const AuthProvider = ({ children }) => {
     logout,
   }
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider> 
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

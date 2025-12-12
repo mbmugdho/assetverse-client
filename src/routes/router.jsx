@@ -7,7 +7,6 @@ import Login from '../pages/Auth/Login'
 import RegisterEmployee from '../pages/Auth/RegisterEmployee'
 import RegisterHR from '../pages/Auth/RegisterHR'
 import NotFound from '../pages/Error/NotFound'
-import LoadingSpinner from '../components/common/LoadingSpinner'
 import ChooseRoleAfterGoogle from '../pages/Auth/ChooseRoleAfterGoogle'
 
 // Employee dashboard pages

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Link, useNavigate } from 'react-router-dom'
 import { Mail, Lock, LogIn } from 'lucide-react'
+import { FcGoogle } from 'react-icons/fc'
 import loginIllustration from '../../assets/illustrations/login.png'
 import { useAuth } from '../../context/AuthContext'
 
@@ -110,11 +111,11 @@ const Login = () => {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4 ">
               {/* Email */}
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text text-sm font-medium text-brand-deep">
+              <div className="form-control ">
+                <label className="label ">
+                  <span className="label-text text-sm font-medium text-brand-deep ">
                     Email
                   </span>
                 </label>
@@ -180,7 +181,7 @@ const Login = () => {
                 disabled={disabled}
                 className="btn-gradient-outline w-full text-sm disabled:opacity-60"
               >
-                Continue with Google
+                <FcGoogle /> Continue with Google
               </button>
             </form>
 

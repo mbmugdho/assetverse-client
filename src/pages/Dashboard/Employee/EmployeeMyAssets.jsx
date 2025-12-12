@@ -5,6 +5,8 @@ import Swal from 'sweetalert2'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useEmployeeAssets } from '../../../hooks/useEmployeeAssets'
 import { returnAssignedAsset } from '../../../services/assignedAssetService'
+import { useAuth } from '../../../context/AuthContext'
+import logo from '../../../assets/logos/logo.png'
 
 const EmployeeMyAssets = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -14,6 +16,7 @@ const EmployeeMyAssets = () => {
   const assets = data || []
 
   const queryClient = useQueryClient()
+  const { backendUser } = useAuth()
 
   const returnMutation = useMutation({
     mutationFn: returnAssignedAsset,
@@ -23,7 +26,7 @@ const EmployeeMyAssets = () => {
   })
 
   const filteredAssets = useMemo(() => {
-    return assets.filter((asset) => {
+    return assets.filter(asset => {
       const matchesSearch = asset.assetName
         .toLowerCase()
         .includes(searchTerm.toLowerCase())
@@ -33,7 +36,7 @@ const EmployeeMyAssets = () => {
     })
   }, [assets, searchTerm, filterType])
 
-  const handleReturn = async (id) => {
+  const handleReturn = async id => {
     const result = await Swal.fire({
       title: 'Return this asset?',
       text: 'This will mark the asset as returned and update inventory.',
@@ -68,11 +71,10 @@ const EmployeeMyAssets = () => {
   }
 
   const handlePrint = () => {
-    // Later: integrate react-to-print or jsPDF
     window.print()
   }
 
-  const getStatusBadgeClass = (status) => {
+  const getStatusBadgeClass = status => {
     if (status === 'assigned') return 'badge-success'
     if (status === 'returned') return 'badge-ghost'
     return 'badge-ghost'
@@ -103,7 +105,7 @@ const EmployeeMyAssets = () => {
               placeholder="Search by asset name"
               className="input input-sm input-bordered pl-9 w-52"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={e => setSearchTerm(e.target.value)}
             />
           </div>
 
@@ -111,7 +113,7 @@ const EmployeeMyAssets = () => {
           <select
             className="select select-sm select-bordered w-40"
             value={filterType}
-            onChange={(e) => setFilterType(e.target.value)}
+            onChange={e => setFilterType(e.target.value)}
           >
             <option value="All">All types</option>
             <option value="Returnable">Returnable</option>
@@ -123,6 +125,7 @@ const EmployeeMyAssets = () => {
             type="button"
             onClick={handlePrint}
             className="btn btn-sm btn-ghost gap-2"
+            disabled={isLoading || isError || filteredAssets.length === 0}
           >
             <Printer className="w-4 h-4" />
             <span>Print</span>
@@ -144,7 +147,36 @@ const EmployeeMyAssets = () => {
       )}
 
       {!isLoading && !isError && (
-        <div className="card-glass-brand p-0 overflow-hidden">
+        <div className="card-glass-brand p-0 overflow-hidden print-area">
+          {/* Printable header with branding */}
+          <div className="px-4 pt-4 pb-2 border-b border-base-200 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <img
+                src={logo}
+                alt="AssetVerse"
+                className="w-8 h-8 rounded-md object-contain"
+              />
+            </div>
+            <div>
+              <p className="text-xs uppercase tracking-[0.18em] text-brand-main font-semibold">
+                Asset assignment report
+              </p>
+              <p className="text-sm font-semibold text-brand-deep">
+                {backendUser?.name || 'Employee'}
+              </p>
+              <p className="text-[11px] text-base-content/60">
+                {backendUser?.email || 'user@example.com'}
+              </p>
+            </div>
+            <div className="text-[11px] text-base-content/60">
+              <p>Generated on {new Date().toLocaleDateString()}</p>
+              <p className="mt-1 italic">
+                For internal use. Verified by AssetVerse.
+              </p>
+            </div>
+          </div>
+
+          {/* Table */}
           <div className="overflow-x-auto">
             <table className="table table-zebra-zebra table-sm md:table-md">
               <thead>
@@ -166,7 +198,7 @@ const EmployeeMyAssets = () => {
                     </td>
                   </tr>
                 ) : (
-                  filteredAssets.map((asset) => (
+                  filteredAssets.map(asset => (
                     <tr key={asset._id} className="text-xs md:text-sm">
                       <td>
                         <div className="flex items-center gap-3">
@@ -237,6 +269,11 @@ const EmployeeMyAssets = () => {
                 )}
               </tbody>
             </table>
+          </div>
+
+          {/* Footer for signature */}
+          <div className="px-4 py-3 border-t border-base-200 text-[11px] text-base-content/60">
+            <p>Signature (HR / Manager): _____________________________</p>
           </div>
         </div>
       )}

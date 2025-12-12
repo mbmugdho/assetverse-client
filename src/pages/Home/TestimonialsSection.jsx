@@ -51,7 +51,7 @@ const clientLogos = [logo1, logo2, logo3, logo4, logo5, logo6, logo7, logo8, log
 
 const TestimonialsSection = () => {
   return (
-    <section className="py-16 md:py-20 ">
+    <section className="py-5 md:py-5 ">
       <div className="container-x space-y-10 md:space-y-12">
         {/* Top heading + logo strip */}
         <div className="space-y-4">
@@ -77,7 +77,7 @@ const TestimonialsSection = () => {
             <div className="card-glass-brand px-4 py-3">
               <Marquee
                 gradient={false}
-                speed={100}
+                speed={80}
                 pauseOnHover={true}
                 className="p-2"
               >

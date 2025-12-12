@@ -84,7 +84,7 @@ const RegisterHR = () => {
                 <span className="text-gradient-hero">company workspace</span>.
               </h1>
               <p className="text-sm text-base-content/70 mt-2">
-                Create your AssetVerse company account. You&apos;ll start with a
+                Create your AssetVerse company account. You'll start with a
                 free Basic package (5 employees).
               </p>
             </div>
@@ -195,7 +195,7 @@ const RegisterHR = () => {
                     name="password"
                     required
                     minLength={6}
-                    placeholder="••••••••"
+                    placeholder="******"
                     className="input input-bordered w-full pl-10"
                   />
                 </div>

@@ -62,7 +62,6 @@ const EmployeeProfile = () => {
     if (!file) return
     const url = URL.createObjectURL(file)
     setPreviewImage(url)
-    // You can later hook a real upload to ImgBB/Cloudinary if desired
   }
 
   const handleSubmit = async (e) => {

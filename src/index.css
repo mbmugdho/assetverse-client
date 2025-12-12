@@ -168,10 +168,10 @@
     background: linear-gradient(
       135deg,
       #f7fff9 0%,
-      #ecf8f0 30%,
-      #dff1e4 60%,
-      #cbe7d4 85%,
-      #beeac5 100%
+      #dff1e4 25%,
+      #beeac5 50%,
+      #cbe7d4 75%,
+      #ecf8f0 100%
     );
   }
 
@@ -179,10 +179,10 @@
     background: linear-gradient(
       135deg,
       #f7fff9 0%,
-      #dff1e4 25%,
-      #beeac5 50%,
-      #cbe7d4 75%,
-      #ecf8f0 100%
+      #ecf8f0 30%,
+      #dff1e4 60%,
+      #cbe7d4 85%,
+      #beeac5 100%
     );
   }
 
@@ -325,3 +325,4 @@
     }
   }
 }
+

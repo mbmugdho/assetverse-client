@@ -9,13 +9,13 @@ import 'swiper/css'
 import 'swiper/css/effect-coverflow'
 import 'swiper/css/pagination'
 
-// Adjust these imports to match your actual illustration filenames
 import heroHrDashboard from '../../assets/illustrations/hero-office.png'
 import heroTeam from '../../assets/illustrations/team-collaboration.png'
 import heroAssets from '../../assets/illustrations/office-management.png'
 import heroSelection from '../../assets/illustrations/selection.png'
 import heroResume from '../../assets/illustrations/resume.png'
 import heroItAssets from '../../assets/illustrations/it-assets.png'
+import { Link } from 'react-router-dom'
 
 const slides = [
   {
@@ -93,14 +93,17 @@ const HeroSection = () => {
 
           {/* CTAs */}
           <div className="flex flex-wrap items-center gap-3 pt-2">
-            <button className="btn-gradient-primary flex items-center gap-2">
+            <Link
+            to='/register/hr' 
+            className="btn-gradient-primary flex items-center gap-2">
               Get started as HR
               <ArrowRight className="w-4 h-4" />
-            </button>
-
-            <button className="btn-gradient-outline flex items-center gap-2">
-              Explore employee view
-            </button>
+            </Link>
+            <Link
+            to='/register/employee' 
+            className="btn-gradient-outline flex items-center gap-2">
+              Explore as employee 
+            </Link>
           </div>
 
           {/* Supporting line */}

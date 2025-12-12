@@ -33,7 +33,7 @@ const packages = [
 
 const PackagesSection = () => {
   return (
-    <section className="py-16 md:py-20 ">
+    <section className="py-8 md:py-8 ">
       <div className="container-x">
         <div className="text-center max-w-2xl mx-auto mb-10 md:mb-12">
           <p className="text-s uppercase tracking-[0.18em] text-brand-main font-semibold">
