@@ -1,4 +1,6 @@
-
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:6366f1,100:8b5cf6&height=180&section=header&text=AssetVerse&fontSize=50&fontColor=ffffff&animation=fadeIn&desc=Corporate%20Asset%20Management%20System%20(Full-Stack)&descSize=18&descAlignY=70" />
+</p>
 
 <h1 align="center">AssetVerse — Corporate Asset Management System (Full-Stack)</h1>
 
