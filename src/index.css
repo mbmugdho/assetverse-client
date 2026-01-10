@@ -316,23 +316,39 @@
     }
   }
 
-  /* Skeleton shimmer animation */
+  /* ========== SHIMMER / SKELETON LOADING ========== */
+
   @keyframes shimmer {
     0% {
-      background-position: 200% 0;
+      background-position: -200% 0;
     }
     100% {
-      background-position: -200% 0;
+      background-position: 200% 0;
     }
   }
 
   .animate-shimmer {
-    animation: shimmer 1.5s ease-in-out infinite;
+    animation: shimmer 2s ease-in-out infinite;
     background: linear-gradient(
       90deg,
-      var(--fallback-b3, oklch(var(--b3))) 25%,
-      var(--fallback-b2, oklch(var(--b2))) 50%,
-      var(--fallback-b3, oklch(var(--b3))) 75%
+      rgba(229, 231, 235, 0.6) 0%,
+      rgba(243, 244, 246, 0.9) 20%,
+      rgba(255, 255, 255, 1) 50%,
+      rgba(243, 244, 246, 0.9) 80%,
+      rgba(229, 231, 235, 0.6) 100%
+    );
+    background-size: 200% 100%;
+  }
+
+  /* Dark mode shimmer */
+  html[data-theme='dark'] .animate-shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(30, 41, 59, 0.6) 0%,
+      rgba(51, 65, 85, 0.9) 20%,
+      rgba(71, 85, 105, 1) 50%,
+      rgba(51, 65, 85, 0.9) 80%,
+      rgba(30, 41, 59, 0.6) 100%
     );
     background-size: 200% 100%;
   }

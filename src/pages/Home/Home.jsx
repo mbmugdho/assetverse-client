@@ -10,6 +10,9 @@ import TestimonialsSection from './TestimonialsSection'
 import UseCasesSection from './useCasesSection'
 import SecuritySection from './SecuritySection'
 import ComparisonSection from './ComparisonSection'
+import About from '../About/About'
+import Contact from '../Contact/Contact'
+import Terms from '../Legal/Terms'
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -36,109 +39,107 @@ const Home = () => {
         <HeroSection />
       </motion.section>
 
-      
-        {/* Other sections: reveal on scroll */}
-        <motion.section
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          custom={1}
-        >
-          <AboutSection />
-        </motion.section>
+      {/* Other sections: reveal on scroll */}
+      <motion.section
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        custom={1}
+      >
+        <AboutSection />
+      </motion.section>
 
-        <motion.section
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          custom={2}
-        >
-          <PackagesSection />
-        </motion.section>
+      <motion.section
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        custom={2}
+      >
+        <PackagesSection />
+      </motion.section>
 
-        <motion.section
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          custom={3}
-        >
-          <FeaturesSection />
-        </motion.section>
+      <motion.section
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        custom={3}
+      >
+        <FeaturesSection />
+      </motion.section>
 
-        <motion.section
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          custom={4}
-        >
-          <TestimonialsSection />
-        </motion.section>
+      <motion.section
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        custom={4}
+      >
+        <TestimonialsSection />
+      </motion.section>
 
-        <motion.section
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          custom={5}
-        >
-          <HowItWorksSection />
-        </motion.section>
+      <motion.section
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        custom={5}
+      >
+        <HowItWorksSection />
+      </motion.section>
 
-        <motion.section
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          custom={6}
-        >
-          <ComparisonSection />
-        </motion.section>
+      <motion.section
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        custom={6}
+      >
+        <ComparisonSection />
+      </motion.section>
 
-        <motion.section
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          custom={7}
-        >
-          <FAQSection />
-        </motion.section>
+      <motion.section
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        custom={7}
+      >
+        <FAQSection />
+      </motion.section>
 
-        <motion.section
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          custom={8}
-        >
-          <UseCasesSection />
-        </motion.section>
+      <motion.section
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        custom={8}
+      >
+        <UseCasesSection />
+      </motion.section>
 
-        <motion.section
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          custom={9}
-        >
-          <SecuritySection />
-        </motion.section>
+      <motion.section
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        custom={9}
+      >
+        <SecuritySection />
+      </motion.section>
 
-        <motion.section
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          custom={10}
-        >
-          <ContactCTASection />
-        </motion.section>
-      </div>
-   
+      <motion.section
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        custom={10}
+      >
+        <ContactCTASection />
+      </motion.section>
+    </div>
   )
 }
 

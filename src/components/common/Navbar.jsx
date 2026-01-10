@@ -53,10 +53,6 @@ const Navbar = () => {
     }
   }
 
-  const handleGoHome = () => {
-    navigate('/')
-  }
-
   const dashboardPath =
     role === 'hr' ? '/dashboard/hr/analytics' : '/dashboard/employee/my-assets'
 
@@ -67,25 +63,33 @@ const Navbar = () => {
         : 'text-base-content hover:bg-base-200 hover:text-brand-deep'
     }`
 
-  // links
-  const homeLink = (
-    <li>
-      <NavLink to="/" className={navLinkClass}>
-        Home
-      </NavLink>
-    </li>
-  )
-
-  const joinLinks = !user && (
+  // Common links for both logged in and logged out
+  const commonLinks = (
     <>
       <li>
-        <NavLink to="/register/employee" className={navLinkClass}>
-          Join as Employee
+        <NavLink to="/" className={navLinkClass}>
+          Home
         </NavLink>
       </li>
       <li>
+        <NavLink to="/assets" className={navLinkClass}>
+          Assets
+        </NavLink>
+      </li>
+    </>
+  )
+
+  // Links for logged out users
+  const joinLinks = !user && (
+    <>
+      <li>
         <NavLink to="/register/hr" className={navLinkClass}>
-          Join as HR Manager
+          Join as HR
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to="/register/employee" className={navLinkClass}>
+          Join as Employee
         </NavLink>
       </li>
     </>
@@ -94,19 +98,37 @@ const Navbar = () => {
   // MOBILE MENU (hamburger)
   const mobileMenu = (
     <ul className="menu menu-sm dropdown-content mt-3 z-[50] p-3 rounded-2xl bg-section-soft2 shadow-lg border border-base-300 w-64">
-      {homeLink}
-      {joinLinks}
+      {/* Common links */}
+      <li>
+        <NavLink to="/" className={navLinkClass}>
+          Home
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to="/assets" className={navLinkClass}>
+          Assets
+        </NavLink>
+      </li>
 
       {!user && (
         <>
-          <li className="mt-1">
-            <NavLink to="/login" className={navLinkClass}>
-              Login
+          {/* Divider */}
+          <li className="my-2">
+            <hr className="border-base-200" />
+          </li>
+          <li>
+            <NavLink to="/register/hr" className={navLinkClass}>
+              Join as HR
             </NavLink>
           </li>
           <li>
             <NavLink to="/register/employee" className={navLinkClass}>
-              Get Started
+              Join as Employee
+            </NavLink>
+          </li>
+          <li className="mt-2">
+            <NavLink to="/login" className={navLinkClass}>
+              Login
             </NavLink>
           </li>
         </>
@@ -114,7 +136,11 @@ const Navbar = () => {
 
       {user && (
         <>
-          <li className="mt-2">
+          {/* Divider */}
+          <li className="my-2">
+            <hr className="border-base-200" />
+          </li>
+          <li>
             <NavLink to={dashboardPath} className={navLinkClass}>
               Dashboard
             </NavLink>
@@ -123,7 +149,7 @@ const Navbar = () => {
             <button
               type="button"
               onClick={handleLogout}
-              className="px-3 py-2 text-sm font-medium rounded-full text-brand-deep hover:bg-base-200 text-left"
+              className="px-3 py-2 text-sm font-medium rounded-full text-error hover:bg-error/10 text-left w-full"
             >
               Logout
             </button>
@@ -168,7 +194,30 @@ const Navbar = () => {
             <span className="text-xs text-base-content/60 truncate">
               {displayEmail}
             </span>
+            <span className="text-[10px] uppercase tracking-wider text-brand-main font-semibold mt-1">
+              {role === 'hr' ? 'HR Manager' : 'Employee'}
+            </span>
           </div>
+        </li>
+        <li>
+          <hr className="my-1 border-base-200" />
+        </li>
+        <li>
+          <NavLink to={dashboardPath} className="text-sm">
+            Dashboard
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to={
+              role === 'hr'
+                ? '/dashboard/hr/profile'
+                : '/dashboard/employee/profile'
+            }
+            className="text-sm"
+          >
+            My Profile
+          </NavLink>
         </li>
         <li>
           <hr className="my-1 border-base-200" />
@@ -217,17 +266,14 @@ const Navbar = () => {
         {/* CENTER: desktop menu */}
         <div className="hidden lg:flex">
           <ul className="menu menu-horizontal px-1 gap-1">
-            {!user && (
-              <>
-                {homeLink}
-                {joinLinks}
-              </>
-            )}
+            {commonLinks}
+            {joinLinks}
           </ul>
         </div>
 
+        {/* RIGHT: actions */}
         <div className="flex items-center gap-2">
-          {/* Theme toggle ALWAYS visible (mobile+desktop) */}
+          {/* Theme toggle ALWAYS visible */}
           <button
             type="button"
             onClick={toggleTheme}
@@ -241,7 +287,7 @@ const Navbar = () => {
             )}
           </button>
 
-         
+          {/* Logged out: show login/get started */}
           {!user && (
             <div className="hidden lg:flex items-center gap-2">
               <NavLink to="/login" className="btn-gradient-outline text-sm">
@@ -256,14 +302,10 @@ const Navbar = () => {
             </div>
           )}
 
-         
+          {/* Logged in: show dashboard + user menu */}
           {user && (
             <>
               <div className="hidden lg:flex items-center gap-2">
-                <ul onClick={handleGoHome} className="flex items-center">
-                  {homeLink}
-                </ul>
-
                 <button
                   type="button"
                   onClick={handleGoToDashboard}
@@ -273,7 +315,6 @@ const Navbar = () => {
                 </button>
               </div>
 
-             
               {userDropdown}
             </>
           )}

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Link, useNavigate } from 'react-router-dom'
-import { Mail, Lock, LogIn, Eye, EyeOff, Zap } from 'lucide-react'
+import { Mail, Lock, LogIn, Eye, EyeOff, Zap, CheckCircle } from 'lucide-react'
 import { FcGoogle } from 'react-icons/fc'
 import loginIllustration from '../../assets/illustrations/login.png'
 import { useAuth } from '../../context/AuthContext'
@@ -11,12 +11,14 @@ const DEMO_CREDENTIALS = {
   hr: {
     email: 'demo.hr@assetverse.app',
     password: 'Demo@123',
-    label: 'Demo HR Login',
+    label: 'Demo HR Manager',
+    description: 'Access HR dashboard with full admin features',
   },
   employee: {
     email: 'demo.employee@assetverse.app',
     password: 'Demo@123',
-    label: 'Demo Employee Login',
+    label: 'Demo Employee',
+    description: 'Access employee dashboard to view assets',
   },
 }
 
@@ -27,6 +29,7 @@ const Login = () => {
   const [success, setSuccess] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({ email: '', password: '' })
+  const [demoFilled, setDemoFilled] = useState(null) // 'hr' or 'employee'
   const navigate = useNavigate()
 
   const handleChange = (e) => {
@@ -34,6 +37,9 @@ const Login = () => {
     setFormData((prev) => ({ ...prev, [name]: value }))
     // Clear errors when user types
     if (error) setError('')
+    if (success) setSuccess('')
+    // Clear demo indicator if user modifies the form
+    if (demoFilled) setDemoFilled(null)
   }
 
   const handleSubmit = async (e) => {
@@ -47,6 +53,13 @@ const Login = () => {
       return
     }
 
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(formData.email)) {
+      setError('Please enter a valid email address')
+      return
+    }
+
     if (formData.password.length < 6) {
       setError('Password must be at least 6 characters')
       return
@@ -54,13 +67,13 @@ const Login = () => {
 
     try {
       setFormLoading(true)
-      const user = await login({ 
-        email: formData.email, 
-        password: formData.password 
+      const user = await login({
+        email: formData.email,
+        password: formData.password,
       })
 
       setSuccess('Login successful! Redirecting...')
-      
+
       setTimeout(() => {
         if (user.role === 'hr') {
           navigate('/dashboard/hr/analytics', { replace: true })
@@ -76,11 +89,12 @@ const Login = () => {
     }
   }
 
-  const handleDemoLogin = async (type) => {
+  const handleDemoLogin = (type) => {
     const creds = DEMO_CREDENTIALS[type]
     setFormData({ email: creds.email, password: creds.password })
     setError('')
-    setSuccess(`Filled ${type.toUpperCase()} demo credentials. Click Login to continue.`)
+    setSuccess(`${creds.label} credentials filled. Click "Login" to continue.`)
+    setDemoFilled(type)
   }
 
   const handleGoogleLogin = async () => {
@@ -125,14 +139,14 @@ const Login = () => {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-center"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center"
         >
           {/* Left: Illustration */}
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="flex justify-center"
+            className="hidden lg:flex justify-center"
           >
             <div className="w-full max-w-md">
               <img
@@ -148,7 +162,7 @@ const Login = () => {
             initial={{ opacity: 0, x: 24 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.15 }}
-            className="card-glass-brand p-6 md:p-8"
+            className="card-glass-brand p-6 md:p-8 max-w-md mx-auto lg:mx-0 w-full"
           >
             <div className="mb-6">
               <p className="text-xs uppercase tracking-[0.18em] text-brand-main font-semibold">
@@ -162,35 +176,45 @@ const Login = () => {
               </p>
             </div>
 
-            {/* Demo Login Buttons */}
+            {/* Demo Login Section */}
             <div className="mb-6 p-4 rounded-xl bg-brand-soft/30 border border-brand-main/20">
               <div className="flex items-center gap-2 mb-3">
                 <Zap className="w-4 h-4 text-brand-main" />
-                <span className="text-xs font-semibold text-brand-deep">
+                <span className="text-sm font-semibold text-brand-deep">
                   Quick Demo Access
                 </span>
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <p className="text-xs text-base-content/70 mb-3">
+                Try AssetVerse instantly with pre-configured demo accounts:
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={() => handleDemoLogin('hr')}
                   disabled={disabled}
-                  className="btn btn-sm bg-brand-main/10 hover:bg-brand-main/20 border-brand-main/30 text-brand-deep text-xs"
+                  className={`btn btn-sm gap-2 text-xs transition-all ${
+                    demoFilled === 'hr'
+                      ? 'bg-brand-main text-white border-brand-main'
+                      : 'bg-brand-main/10 hover:bg-brand-main/20 border-brand-main/30 text-brand-deep'
+                  }`}
                 >
-                  Demo HR Login
+                  {demoFilled === 'hr' && <CheckCircle className="w-3 h-3" />}
+                  HR Manager
                 </button>
                 <button
                   type="button"
                   onClick={() => handleDemoLogin('employee')}
                   disabled={disabled}
-                  className="btn btn-sm bg-brand-accent/10 hover:bg-brand-accent/20 border-brand-accent/30 text-brand-deep text-xs"
+                  className={`btn btn-sm gap-2 text-xs transition-all ${
+                    demoFilled === 'employee'
+                      ? 'bg-brand-accent text-white border-brand-accent'
+                      : 'bg-brand-accent/10 hover:bg-brand-accent/20 border-brand-accent/30 text-brand-deep'
+                  }`}
                 >
-                  Demo Employee
+                  {demoFilled === 'employee' && <CheckCircle className="w-3 h-3" />}
+                  Employee
                 </button>
               </div>
-              <p className="text-[10px] text-base-content/60 mt-2">
-                Click a button above to auto-fill demo credentials
-              </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -214,7 +238,7 @@ const Login = () => {
                     placeholder="you@example.com"
                     className={`input input-bordered w-full pl-10 ${
                       error && !formData.email ? 'input-error' : ''
-                    }`}
+                    } ${demoFilled ? 'bg-brand-soft/20 border-brand-main/40' : ''}`}
                   />
                 </div>
               </div>
@@ -240,12 +264,13 @@ const Login = () => {
                     placeholder="••••••••"
                     className={`input input-bordered w-full pl-10 pr-10 ${
                       error && formData.password.length < 6 ? 'input-error' : ''
-                    }`}
+                    } ${demoFilled ? 'bg-brand-soft/20 border-brand-main/40' : ''}`}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-3 flex items-center text-base-content/50 hover:text-base-content"
+                    className="absolute inset-y-0 right-3 flex items-center text-base-content/50 hover:text-base-content transition-colors"
+                    tabIndex={-1}
                   >
                     {showPassword ? (
                       <EyeOff className="w-4 h-4" />
@@ -266,9 +291,9 @@ const Login = () => {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="alert alert-error py-2 px-3"
+                  className="bg-error/10 border border-error/30 text-error rounded-lg py-2.5 px-3 text-xs"
                 >
-                  <span className="text-xs">{error}</span>
+                  {error}
                 </motion.div>
               )}
 
@@ -277,12 +302,14 @@ const Login = () => {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="alert alert-success py-2 px-3"
+                  className="bg-success/10 border border-success/30 text-success rounded-lg py-2.5 px-3 text-xs flex items-center gap-2"
                 >
-                  <span className="text-xs">{success}</span>
+                  <CheckCircle className="w-4 h-4 flex-shrink-0" />
+                  {success}
                 </motion.div>
               )}
 
+              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={disabled}
@@ -305,6 +332,7 @@ const Login = () => {
                 or continue with
               </div>
 
+              {/* Google Login */}
               <button
                 type="button"
                 onClick={handleGoogleLogin}
@@ -316,7 +344,8 @@ const Login = () => {
               </button>
             </form>
 
-            <div className="mt-5 text-xs md:text-sm text-base-content/70 space-y-1.5">
+            {/* Register Links */}
+            <div className="mt-6 pt-4 border-t border-base-200 text-xs md:text-sm text-base-content/70 space-y-1.5">
               <p>
                 New here?{' '}
                 <Link
@@ -332,7 +361,6 @@ const Login = () => {
                 >
                   Join as HR Manager
                 </Link>
-                .
               </p>
             </div>
           </motion.div>
