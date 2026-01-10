@@ -26,7 +26,7 @@ const sectionVariants = {
 
 const Home = () => {
   return (
-    <div className="bg-section-soft min-h-[calc(100vh-4rem)]">
+    <div className="bg-section-soft min-h-[calc(100vh-4rem)] overflow-x-hidden">
       {/* Hero: fade in on initial load (HeroSection has its own background) */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}

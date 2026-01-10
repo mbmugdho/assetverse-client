@@ -64,7 +64,7 @@ const slides = [
 
 const HeroSection = () => {
   return (
-    <section className="">
+    <section className="min-h-[60vh] max-h-[85vh] flex items-center">
       <div className="container-x py-16 md:py-24 lg:py-28 grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 items-center">
         {/* Left: Text & CTAs */}
         <motion.div
@@ -130,7 +130,8 @@ const HeroSection = () => {
             {/* Soft glow */}
             <div className="pointer-events-none absolute -top-24 -right-24 w-64 h-64 rounded-full bg-brand-soft/40 blur-3xl" />
 
-            <Swiper
+            <div className='relative overflow-x-hidden'>
+              <Swiper
               effect="coverflow"
               grabCursor
               centeredSlides
@@ -177,6 +178,10 @@ const HeroSection = () => {
                 </SwiperSlide>
               ))}
             </Swiper>
+            </div>
+
+
+
           </div>
         </motion.div>
       </div>

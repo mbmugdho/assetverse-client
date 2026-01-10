@@ -4,8 +4,14 @@
 
 /* ---------------- Base ---------------- */
 @layer base {
-  html {
+  html,
+  body {
     scroll-behavior: smooth;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
   body {
@@ -147,21 +153,6 @@
   }
 
   /* ========== BACKGROUND GRADIENTS ========== */
-
-  /* Hero section background */
-  .bg-hero-surface {
-    background: radial-gradient(
-        600px 400px at 0% 0%,
-        rgba(118, 185, 71, 0.16) 0%,
-        transparent 55%
-      ),
-      radial-gradient(
-        500px 300px at 100% 10%,
-        rgba(51, 123, 1, 0.18) 0%,
-        transparent 55%
-      ),
-      linear-gradient(135deg, #beeac5 0%, #ffffff 40%, #e8f7ec 100%);
-  }
 
   /* Slightly softer section backgrounds */
   .bg-section-soft {
@@ -324,5 +315,25 @@
       opacity: 0.5;
     }
   }
-}
 
+  /* Skeleton shimmer animation */
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 1.5s ease-in-out infinite;
+    background: linear-gradient(
+      90deg,
+      var(--fallback-b3, oklch(var(--b3))) 25%,
+      var(--fallback-b2, oklch(var(--b2))) 50%,
+      var(--fallback-b3, oklch(var(--b3))) 75%
+    );
+    background-size: 200% 100%;
+  }
+}
